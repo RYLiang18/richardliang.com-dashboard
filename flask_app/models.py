@@ -42,3 +42,12 @@ class HomepageDetails(db.Document):
     
     def parse_about_me(self):
         return self.about_me.split('\n')
+
+class Experience(db.Document):
+    owner = db.ReferenceField(User, required=True)
+    company_name = db.StringField(required=True)
+    position = db.StringField(required=True)
+    starting_date = db.StringField(required=True)
+    ending_date = db.StringField(required=True)
+    tech_stack = db.ListField(db.StringField(unique=True))
+    
