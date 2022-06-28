@@ -1,81 +1,84 @@
 {% extends "header.html" %}
 {% block content %}
-<form action="" method="post">
-    <!-- CSRF token -->
-    {{form.csrf_token}}
-
-    <!-- company name -->
     <div class="mb-3">
-        {{form.company_name.label(class="form-label")}}
-        {{form.company_name(class="form-control mb-1")}}
-
-        {% if form.company_name.errors %}
-            <div class="alert alert-warning" role="alert">
-                {% for error in form.company_name.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% endif %}
+        <b>Note: </b> You will be able to add your tech stack and links by editing
+        this experience after creating it.
     </div>
+    <form action="" method="post">
+        <!-- CSRF token -->
+        {{form.csrf_token}}
 
-    <!-- position -->
-    <div class="mb-3">
-        {{form.position.label(class="form-label")}}
-        {{form.position(class="form-control mb-1")}}
+        <!-- company name -->
+        <div class="mb-3">
+            {{form.company_name.label(class="form-label")}}
+            {{form.company_name(class="form-control mb-1")}}
 
-        {% if form.position.errors %}
-            <div class="alert alert-warning" role="alert">
-                {% for error in form.position.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
+            {% if form.company_name.errors %}
+                <div class="alert alert-warning" role="alert">
+                    {% for error in form.company_name.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
 
-    <!-- start date -->
-    <div class="mb-3">
-        {{form.start_date.label(class="form-label")}}
-        {{form.start_date(class="form-control mb-1")}}
+        <!-- position -->
+        <div class="mb-3">
+            {{form.position.label(class="form-label")}}
+            {{form.position(class="form-control mb-1")}}
 
-        {% if form.start_date.errors %}
-            <div class="alert alert-warning" role="alert">
-                {% for error in form.start_date.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
+            {% if form.position.errors %}
+                <div class="alert alert-warning" role="alert">
+                    {% for error in form.position.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
 
-    <!-- end date -->
-    <div class="mb-3">
-        {{form.end_date.label(class="form-label")}}
-        {{form.end_date(class="form-control mb-1")}}
+        <!-- start date -->
+        <div class="mb-3">
+            {{form.start_date.label(class="form-label")}}
+            {{form.start_date(class="form-control mb-1")}}
 
-        {% if form.end_date.errors %}
-            <div class="alert alert-warning" role="alert">
-                {% for error in form.end_date.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
+            {% if form.start_date.errors %}
+                <div class="alert alert-warning" role="alert">
+                    {% for error in form.start_date.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
 
-    <!-- about -->
-    <div class="mb-3">
-        {{form.about.label(class="form-label")}}
-        {{form.about(class="form-control mb-1", id="rl-dashboard-textbox")}}
+        <!-- end date -->
+        <div class="mb-3">
+            {{form.end_date.label(class="form-label")}}
+            {{form.end_date(class="form-control mb-1")}}
 
-        {% if form.about.errors %}
-            <div class="alert alert-warning" role="alert">
-                {% for error in form.about.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
+            {% if form.end_date.errors %}
+                <div class="alert alert-warning" role="alert">
+                    {% for error in form.end_date.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
 
-    <!-- submit button -->
-    {{ form.submit(class="btn btn-primary") }}
+        <!-- about -->
+        <div class="mb-3">
+            {{form.about.label(class="form-label")}}
+            {{form.about(class="form-control mb-1", id="rl-dashboard-textbox")}}
 
-</form>
+            {% if form.about.errors %}
+                <div class="alert alert-warning" role="alert">
+                    {% for error in form.about.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- submit button -->
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
 {% endblock %}

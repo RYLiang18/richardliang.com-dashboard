@@ -1,8 +1,10 @@
+from datetime import datetime
 from flask import (
     Blueprint,
     render_template,
     redirect,
-    url_for
+    url_for,
+    flash
 )
 from flask_app.experience.forms import CreateExperienceForm
 from flask_login import(
@@ -11,10 +13,15 @@ from flask_login import(
 )
 from flask_app.models import (
     Experience,
+    ExperienceBullet,
+    ExperienceTechnology,
     load_user
 )
+from flask_app.utils import current_time
 
-experience_blueprint = Blueprint("experience", __name__, url_prefix="/experience", template_folder='./templates')
+experience_blueprint = Blueprint(
+    "experience", __name__, url_prefix="/experience", template_folder='./templates'
+)
 
 @experience_blueprint.route("/")
 @login_required
@@ -35,7 +42,8 @@ def create_experience():
             position = create_experience_form.position.data,
             start_date = create_experience_form.start_date.data,
             end_date = create_experience_form.end_date.data,
-            about = create_experience_form.about.data
+            about = create_experience_form.about.data,
+            creation_time = current_time()
         )
         new_experience.save()
 
@@ -45,4 +53,29 @@ def create_experience():
         "create_experience.html",
         title = "Experience - Create Experience",
         form = create_experience_form
+    )
+
+@experience_blueprint.route(
+    "/view_experience/<experience_owner_username>/<experience_creation_time>",
+    methods=["GET"]
+)
+@login_required
+def view_experience(experience_owner_username, experience_creation_time):
+    # // KEEP OTHERS FROM EDITING YOUR STUFF! ////
+    if current_user.username != experience_owner_username:
+        flash("You can\'t view someone else\'s experience!")
+        return redirect(url_for('experience.index'))
+    # ////////////////////////////////////////////
+
+    experience = Experience.objects(
+        owner = load_user(experience_owner_username),
+        creation_time = experience_creation_time
+    ).first()
+
+    tech_stack = ExperienceTechnology.objects(
+        experience = experience
+    )
+
+    return render_template(
+        "view_experience.html", experience = experience, tech_stack = tech_stack
     )

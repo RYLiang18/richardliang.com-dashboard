@@ -24,6 +24,7 @@ from flask_app.homepage.forms import (
     AboutMeUpdateForm,
     EmailUpdateForm
 )
+from flask_app.utils import current_time
 
 homepage_blueprint = Blueprint("homepage", __name__, url_prefix='/homepage', template_folder='./templates')
 
@@ -169,12 +170,11 @@ def add_personal_link():
     link_add_form = PersonalLinkAddForm()
 
     if link_add_form.validate_on_submit():
-        current_time = datetime.now().strftime("%B%d%Y%H%M%S%f")
         new_link = Link(
             owner = load_user(current_user.username),
             link_name = link_add_form.link_name.data,
             url = link_add_form.url.data,
-            datetime_str = current_time
+            datetime_str = current_time()
         )
         new_link.save()
 

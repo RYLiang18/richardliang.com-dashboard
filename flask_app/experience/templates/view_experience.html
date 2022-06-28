@@ -1,0 +1,110 @@
+{% extends "header.html" %}
+{% block content %}
+    <!-- Company Name -->
+    <div class="card mb-3">
+        <h3 class="card-header">Company Name</h5>
+        <div class="card-body">
+            <h5 class="card-title mb-2">
+                {{experience.company_name}}
+            </h5>
+            <!-- TODO -->
+            <a href="#" class="btn btn-primary">
+                Edit
+            </a>
+        </div>
+    </div>
+
+    <!-- Position -->
+    <div class="card mb-3">
+        <h3 class="card-header">Position</h5>
+        <div class="card-body">
+            <h5 class="card-title mb-2">
+                {{experience.position}}
+            </h5>
+            <!-- TODO -->
+            <a href="#" class="btn btn-primary">
+                Edit
+            </a>
+        </div>
+    </div>
+
+    <!-- Start and End date -->
+    <div class="row mb-3">
+        <div class="col mr-1">
+            <!-- start date -->
+            <div class="card">
+                <h3 class="card-header">Start Date</h5>
+                <div class="card-body">
+                    <h5 class="card-title mb-2">
+                        {{experience.start_date}}
+                    </h5>
+                    <!-- TODO -->
+                    <a href="#" class="btn btn-primary">
+                        Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- end date -->
+        <div class="col ml-1">
+            <!-- start date -->
+            <div class="card">
+                <h3 class="card-header">End Date</h5>
+                <div class="card-body">
+                    <h5 class="card-title mb-2">
+                        {{experience.end_date}}
+                    </h5>
+                    <!-- TODO -->
+                    <a href="#" class="btn btn-primary">
+                        Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="card mb-3">
+        <h3 class = "card-header">Tech Stack</h3>
+        <div class="card-body">
+            <ul class="list-group mb-3">
+                {% for technology in tech_stack %}
+                    <li class="list-group-item">
+                        <div class="row g-3">
+                            <div class = "col">
+                                {{technology.tech}}
+                            </div>
+                            <div class = "col">
+                                <div class="float-end">
+                                    {% with id = technology.get_id() %}
+                                        <!-- 
+                                            TODO
+                                        -->
+                                        <a 
+                                            href="#" 
+                                            class="btn btn-primary mr-3">
+                                            Edit
+                                        </a>
+
+                                        <!-- TODO -->
+                                        <a 
+                                            href="#" 
+                                            class="btn btn-danger">
+                                            Delete
+                                        </a>
+                                    {% endwith %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <!-- TODO -->
+            <a href="{{url_for('homepage.add_personal_link')}}" class="btn btn-primary">
+                Add Technology
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

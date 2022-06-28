@@ -49,17 +49,36 @@ class Experience(db.Document):
     position = db.StringField(required=True)
     start_date = db.StringField(required=True)
     end_date = db.StringField(required=True)
-    tech_stack = db.ListField(db.StringField(unique=True))
     about = db.StringField(required=True)
+    creation_time = db.StringField(required=True)
 
-class Bullet(db.Document):
+class ExperienceTechnology(db.Document):
+    owner = db.ReferenceField(User, required=True),
+    tech = db.StringField()
+    experience = db.ReferenceField
+    creation_time = db.StringField(required=True)
+
+    def get_id(self):
+        return [self.owner.username, self.creation_time]
+
+class ExperienceBullet(db.Document):
     owner = db.ReferenceField(User, required=True)
     experience = db.ReferenceField(Experience, required=True)
 
     # using StringField instead of DateTimeField since time is part of ID that
     # will be passed into a route URL
-    datetime_str = db.StringField(required=True)
+    creation_time = db.StringField(required=True)
     content = db.StringField(required=True)
 
     def get_id(self):
-        return [self.owner.username, self.datetime_str]
+        return [self.owner.username, self.creation_time]
+
+class ExperienceLink(db.Document):
+    owner = db.ReferenceField(User, required=True)
+    link_name = db.StringField(required=True)
+    url = db.URLField(required=True)
+    creation_time = db.StringField(required=True)
+    experience = db.ReferenceField(Experience, required=True)
+
+    def get_id(self):
+        return [self.owner.username, self.creation_time]
