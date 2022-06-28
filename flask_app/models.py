@@ -47,7 +47,19 @@ class Experience(db.Document):
     owner = db.ReferenceField(User, required=True)
     company_name = db.StringField(required=True)
     position = db.StringField(required=True)
-    starting_date = db.StringField(required=True)
-    ending_date = db.StringField(required=True)
+    start_date = db.StringField(required=True)
+    end_date = db.StringField(required=True)
     tech_stack = db.ListField(db.StringField(unique=True))
-    
+    about = db.StringField(required=True)
+
+class Bullet(db.Document):
+    owner = db.ReferenceField(User, required=True)
+    experience = db.ReferenceField(Experience, required=True)
+
+    # using StringField instead of DateTimeField since time is part of ID that
+    # will be passed into a route URL
+    datetime_str = db.StringField(required=True)
+    content = db.StringField(required=True)
+
+    def get_id(self):
+        return [self.owner.username, self.datetime_str]
