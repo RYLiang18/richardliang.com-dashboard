@@ -15,6 +15,7 @@ from flask_app.models import (
     Experience,
     ExperienceBullet,
     ExperienceTechnology,
+    ExperienceLink,
     load_user
 )
 from flask_app.utils import current_time
@@ -61,7 +62,7 @@ def create_experience():
 )
 @login_required
 def view_experience(experience_owner_username, experience_creation_time):
-    # // KEEP OTHERS FROM EDITING YOUR STUFF! ////
+    # // KEEP OTHERS FROM VIEWING YOUR STUFF! ////
     if current_user.username != experience_owner_username:
         flash("You can\'t view someone else\'s experience!")
         return redirect(url_for('experience.index'))
@@ -75,7 +76,17 @@ def view_experience(experience_owner_username, experience_creation_time):
     tech_stack = ExperienceTechnology.objects(
         experience = experience
     )
+    bullet_points = ExperienceBullet.objects(
+        experience = experience
+    )
+    links = ExperienceLink.objects(
+        experience = experience
+    )
 
     return render_template(
-        "view_experience.html", experience = experience, tech_stack = tech_stack
+        "view_experience.html", 
+        experience = experience, 
+        tech_stack = tech_stack,
+        bullet_points = bullet_points,
+        links = links
     )

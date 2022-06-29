@@ -78,9 +78,7 @@
                             <div class = "col">
                                 <div class="float-end">
                                     {% with id = technology.get_id() %}
-                                        <!-- 
-                                            TODO
-                                        -->
+                                        <!-- TODO -->
                                         <a 
                                             href="#" 
                                             class="btn btn-primary mr-3">
@@ -101,10 +99,102 @@
                 {% endfor %}
             </ul>
             <!-- TODO -->
-            <a href="{{url_for('homepage.add_personal_link')}}" class="btn btn-primary">
+            <a href="#" class="btn btn-primary">
                 Add Technology
             </a>
         </div>
     </div>
 
+    <!-- Bullets -->
+    <div class="card mb-3">
+        <h3 class = "card-header">Bullet Points</h3>
+        <div class="card-body">
+            <ul class="list-group mb-3">
+                {% for bullet in bullet_points %}
+                    <li class="list-group-item">
+                        <div class="row g-3">
+                            {{bullet.content}}
+                        </div>
+                        <div class="row g-3">
+                            {% with id = bullet.get_id() %}
+                                <!-- TODO -->
+                                <a 
+                                    href="#" 
+                                    class="btn btn-primary mr-3">
+                                    Edit
+                                </a>
+
+                                <!-- TODO -->
+                                <a 
+                                    href="#" 
+                                    class="btn btn-danger">
+                                    Delete
+                                </a>
+                            {% endwith %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <!-- TODO -->
+            <a href="#" class="btn btn-primary">
+                Add Bullet
+            </a>
+        </div>
+    </div>
+
+    <!-- Links -->
+    <div class="card mb-3">
+        <h3 class = "card-header">Links</h3>
+        <div class="card-body">
+            <ul class="list-group mb-3">
+                {% for link in links %}
+                    <li class="list-group-item">
+                        <div class="row g-3">
+                            <div class = "col">
+                                <b>{{link.link_name}} :</b> {{link.url}}
+                            </div>
+                            <div class = "col">
+                                <div class="float-end">
+                                    {% with link_id = link.get_id() %}
+                                        <a 
+                                            href="#" 
+                                            class="btn btn-primary mr-3">
+                                            Edit
+                                        </a>
+
+                                        <!-- TODO -->
+                                        <a 
+                                            href="#" 
+                                            class="btn btn-danger">
+                                            Delete
+                                        </a>
+                                    {% endwith %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <!-- TODO -->
+            <a href="#" class="btn btn-primary">
+                Add Link
+            </a>
+        </div>
+    </div>
+
+    <!-- about -->
+    <div class="card mb-3">
+        <h3 class="card-header">About</h5>
+        <div class="card-body">
+            {% for para in experience.parse_about() %}
+                <p class="card-text">
+                    {{para}}
+                </p>
+            {% endfor %}
+            <!-- TODO -->
+            <a href="#" class="btn btn-primary">
+                Edit
+            </a>
+        </div>
+    </div>
 {% endblock %}
