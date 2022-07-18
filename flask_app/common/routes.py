@@ -85,10 +85,6 @@ def create_link(link_model, related_document_creation_date=None):
 )
 @login_required
 def update_link(link_creation_time):
-    # if not matching_username(link_owner_username):
-    #     flash("You can\'t edit someone else\'s link!")
-    #     return redirect(url_for('homepage.index'))
-
     link = None
     for link_collection in link_collections:
         link = link_collection.objects(

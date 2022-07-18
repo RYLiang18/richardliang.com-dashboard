@@ -37,9 +37,6 @@ session['url'] = url_for('previous_URL')
     - edge case: extremely pepega, but what if new user tries to access their homepage details api without first logging in
 - See if there's a way to aggregate ExperienceLinks and HomepageLinks in mongoengine
 - Common Blueprint
-    - Links
-        - create_link
-        - delete_link
     - Bullets
         - create_bullet
         - update_bullet
