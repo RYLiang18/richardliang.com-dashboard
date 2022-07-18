@@ -57,21 +57,25 @@ def create_experience():
     )
 
 @experience_blueprint.route(
-    "/view_experience/<experience_owner_username>/<experience_creation_time>",
+    "/view_experience/<experience_creation_time>",
     methods=["GET"]
 )
 @login_required
-def view_experience(experience_owner_username, experience_creation_time):
+def view_experience(experience_creation_time):
     # // KEEP OTHERS FROM VIEWING YOUR STUFF! ////
-    if current_user.username != experience_owner_username:
-        flash("You can\'t view someone else\'s experience!")
-        return redirect(url_for('experience.index'))
+    # if current_user.username != experience_owner_username:
+    #     flash("You can\'t view someone else\'s experience!")
+    #     return redirect(url_for('experience.index'))
     # ////////////////////////////////////////////
 
     experience = Experience.objects(
-        owner = load_user(experience_owner_username),
+        owner = load_user(current_user.username),
         creation_time = experience_creation_time
     ).first()
+
+    if experience is None:
+        # TODO: return 404
+        pass
 
     tech_stack = ExperienceTechnology.objects(
         experience = experience

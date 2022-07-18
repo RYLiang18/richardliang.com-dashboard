@@ -21,11 +21,11 @@ from flask_app.models import (
     load_user
 )
 from flask_app import bcrypt, ipsum
+from flask_app.utils import current_time
 
 users_blueprint = Blueprint("users", __name__, template_folder='./templates')
 
 def new_default_homepage():
-    current_time = datetime.now().strftime("%B%d%Y%H%M%S%f")
     default_homepage_details = HomepageDetails(
         owner = load_user(current_user.username),
         full_name = "Replace with your full name",
@@ -33,7 +33,7 @@ def new_default_homepage():
         pfp_link = "https://i.imgur.com/rdKHsyK.jpg",
         description = "replace me with a short description of yourself",
         about_me = ipsum(),
-        creation_time=current_time
+        creation_time=current_time()
     )
     default_homepage_details.save()
 

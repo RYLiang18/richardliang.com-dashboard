@@ -157,15 +157,23 @@
                                 <div class="float-end">
                                     {% with link_id = link.get_id() %}
                                         <a 
-                                            href="#" 
-                                            class="btn btn-primary mr-3">
+                                            href="{{url_for(
+                                                'common.update_link',
+                                                link_creation_time = link_id[1]
+                                            )}}" 
+                                            class="btn btn-primary mr-3"
+                                        >
                                             Edit
                                         </a>
 
                                         <!-- TODO -->
                                         <a 
-                                            href="#" 
-                                            class="btn btn-danger">
+                                            href="{{url_for(
+                                                'common.delete_link',
+                                                link_creation_time = link_id[1]
+                                            )}}"
+                                            class="btn btn-danger"
+                                        >
                                             Delete
                                         </a>
                                     {% endwith %}
@@ -176,7 +184,14 @@
                 {% endfor %}
             </ul>
             <!-- TODO -->
-            <a href="#" class="btn btn-primary">
+            <a 
+                href="{{url_for(
+                    'common.create_link',
+                    link_model = 'ExperienceLink',
+                    related_document_creation_date = experience.get_id()[1]
+                )}}"
+                class="btn btn-primary"
+            >
                 Add Link
             </a>
         </div>

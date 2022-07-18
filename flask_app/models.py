@@ -60,6 +60,9 @@ class Experience(db.Document):
 
     def parse_about(self):
         return self.about.split('\n')
+    
+    def get_id(self):
+        return [self.owner.username, self.creation_time]
 
 class ExperienceTechnology(db.Document):
     owner = db.ReferenceField(User, required=True)

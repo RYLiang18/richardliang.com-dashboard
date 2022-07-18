@@ -13,34 +13,38 @@ from flask_login import(
     current_user
 )
 from flask_app.models import (
-    HomepageDetails,
+    Experience,
     HomepageDetailsLink,
+    ExperienceLink,
     load_user
 )
 from flask_app.common.forms import (
     CreateLinkForm,
     UpdateLinkForm
 )
+from flask_app.utils import current_time
 
 common_blueprint = Blueprint(
     "common", __name__, url_prefix="/common", template_folder="./templates"
 )
 
-link_collections = [HomepageDetailsLink]
+link_collections = [HomepageDetailsLink, ExperienceLink]
 
-# def matching_username(username):
-#     return current_user.username == username
 
 @common_blueprint.route(
-    "/create_link/<link_model>", methods=["GET", "POST"]
+    "/create_link/<link_model>", 
+    methods=["GET", "POST"],
+    defaults={'related_document_creation_date' : None}
+)
+@common_blueprint.route(
+    "/create_link/<link_model>/<related_document_creation_date>", methods=["GET", "POST"]
 )
 @login_required
-def create_link(link_model):
+def create_link(link_model, related_document_creation_date=None):
     create_link_form = CreateLinkForm()
 
     if create_link_form.validate_on_submit():
         new_link = None
-        current_time = datetime.now().strftime("%B%d%Y%H%M%S%f")
 
         # CASE: HomepageDetails
         if link_model == "HomepageDetailsLink":
@@ -48,10 +52,23 @@ def create_link(link_model):
                 owner = load_user(current_user.username),
                 link_name = create_link_form.link_name.data,
                 url = create_link_form.url.data,
-                creation_time = current_time
+                creation_time = current_time()
             )
         
-        # TODO: CASE: Experience
+        # CASE: Experience
+        elif link_model == "ExperienceLink":
+            related_experience = Experience.objects(
+                owner = load_user(current_user.username),
+                creation_time = related_document_creation_date
+            ).first()
+
+            new_link = ExperienceLink(
+                owner = load_user(current_user.username),
+                link_name = create_link_form.link_name.data,
+                url = create_link_form.url.data,
+                creation_time = current_time(),
+                experience = related_experience
+            )
 
         new_link.save()
         return redirect(session['url'])
@@ -71,8 +88,7 @@ def update_link(link_creation_time):
     # if not matching_username(link_owner_username):
     #     flash("You can\'t edit someone else\'s link!")
     #     return redirect(url_for('homepage.index'))
-    
-    
+
     link = None
     for link_collection in link_collections:
         link = link_collection.objects(
