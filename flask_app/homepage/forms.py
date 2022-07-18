@@ -31,7 +31,7 @@ class PFPLinkUpdateForm(FlaskForm):
     
     def validate_url(form, field):
         jpg_regex = r"\.jpg$"
-        png_regex = r"\.jpg$"
+        png_regex = r"\.png$"
 
         if (not re.search(jpg_regex, field.data)) and (not re.search(png_regex, field.data)):
             raise ValidationError("URL must end in .jpg or .png")
@@ -39,16 +39,6 @@ class PFPLinkUpdateForm(FlaskForm):
 class DescriptionUpdateForm(FlaskForm):
     description = TextAreaField("Description", validators=[InputRequired()])
     update = SubmitField("Update")
-
-class PersonalLinkUpdateForm(FlaskForm):
-    link_name = StringField("Link Name", validators=[InputRequired()])
-    url = URLField("Link URL", validators=[InputRequired()])
-    update = SubmitField("Update")
-
-class PersonalLinkAddForm(FlaskForm):
-    link_name = StringField("Link Name", validators=[InputRequired()])
-    url = URLField("Link URL", validators=[InputRequired()])
-    submit = SubmitField("Add")
 
 class AboutMeUpdateForm(FlaskForm):
     about_me = TextAreaField("About Me", validators=[InputRequired()])

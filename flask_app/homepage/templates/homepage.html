@@ -69,7 +69,7 @@
         <h3 class = "card-header">Personal Links</h3>
         <div class="card-body">
             <ul class="list-group mb-3">
-                {% for link in homepage_details.links %}
+                {% for link in links %}
                     <li class="list-group-item">
                         <div class="row g-3">
                             <div class = "col">
@@ -80,20 +80,19 @@
                                     {% with link_id = link.get_id() %}
                                         <a 
                                             href="{{url_for(
-                                                'homepage.update_personal_link',
-                                                link_owner_username = link_id[0],
-                                                link_datetime_str = link_id[1]
+                                                'common.update_link',
+                                                link_creation_time = link_id[1]
                                             )}}" 
-                                            class="btn btn-primary mr-3">
+                                            class="btn btn-primary mr-3"
+                                        >
                                             Edit
                                         </a>
 
                                         <!-- TODO -->
                                         <a 
                                             href="{{url_for(
-                                                'homepage.delete_personal_link',
-                                                link_owner_username = link_id[0],
-                                                link_datetime_str = link_id[1]
+                                                'common.delete_link',
+                                                link_creation_time = link_id[1]
                                             )}}" 
                                             class="btn btn-danger">
                                             Delete
@@ -106,7 +105,13 @@
                 {% endfor %}
             </ul>
             <!-- TODO -->
-            <a href="{{url_for('homepage.add_personal_link')}}" class="btn btn-primary">
+            <a 
+                href="{{url_for(
+                    'common.create_link',
+                    link_model = 'HomepageDetailsLink'
+                )}}" 
+                class="btn btn-primary"
+            >
                 Add Link
             </a>
         </div>

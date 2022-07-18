@@ -62,11 +62,13 @@ def create_app():
     from flask_app.homepage.routes import homepage_blueprint
     from flask_app.experience.routes import experience_blueprint
     from flask_app.projects.routes import projects_blueprint
+    from flask_app.common.routes import common_blueprint
     blueprints = [
         users_blueprint,
         homepage_blueprint,
         experience_blueprint,
-        projects_blueprint
+        projects_blueprint,
+        common_blueprint
     ]
     for blueprint in blueprints:
         app.register_blueprint(blueprint)

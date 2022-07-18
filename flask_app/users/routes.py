@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import (
     Blueprint,
     render_template,
@@ -24,13 +25,15 @@ from flask_app import bcrypt, ipsum
 users_blueprint = Blueprint("users", __name__, template_folder='./templates')
 
 def new_default_homepage():
+    current_time = datetime.now().strftime("%B%d%Y%H%M%S%f")
     default_homepage_details = HomepageDetails(
         owner = load_user(current_user.username),
         full_name = "Replace with your full name",
         email = "your_email@example.com",
         pfp_link = "https://i.imgur.com/rdKHsyK.jpg",
         description = "replace me with a short description of yourself",
-        about_me = ipsum()
+        about_me = ipsum(),
+        creation_time=current_time
     )
     default_homepage_details.save()
 
