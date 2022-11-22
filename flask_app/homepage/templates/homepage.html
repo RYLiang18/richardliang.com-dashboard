@@ -2,7 +2,7 @@
 {% block content %}
     <!-- full name -->
     <div class="card mb-3">
-        <h3 class="card-header">Full Name</h5>
+        <h3 class="card-header">Full Name</h3>
         <div class="card-body">
             <h5 class="card-title mb-2">
                 {{homepage_details.full_name}}
@@ -16,7 +16,7 @@
 
     <!-- email -->
     <div class="card mb-3">
-        <h3 class="card-header">Email</h5>
+        <h3 class="card-header">Email</h3>
         <div class="card-body">
             <h5 class="card-title mb-2">
                 {{homepage_details.email}}
@@ -94,7 +94,8 @@
                                                 'common.delete_link',
                                                 link_creation_time = link_id[1]
                                             )}}" 
-                                            class="btn btn-danger">
+                                            class="btn btn-danger"
+                                        >
                                             Delete
                                         </a>
                                     {% endwith %}
@@ -119,7 +120,7 @@
 
     <!-- about_me -->
     <div class="card mb-3">
-        <h3 class="card-header">About Me</h5>
+        <h3 class="card-header">About Me</h3>
         <div class="card-body">
             {% for para in homepage_details.parse_about_me() %}
                 <p class="card-text">

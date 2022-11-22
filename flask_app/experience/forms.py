@@ -1,5 +1,9 @@
 import re
 from flask_wtf import FlaskForm
+from flask_app.utils import (
+    is_date,
+    url_regex
+)
 from wtforms import (
     StringField,
     SubmitField,
@@ -14,9 +18,6 @@ from wtforms.validators import (
     ValidationError
 )
 
-def is_date(data):
-    regex = r"(^[\d]{2}/[\d]{2}/[\d]{4}$)|(^present$)"
-    return bool(re.search(regex, data))
 
 class CreateExperienceForm(FlaskForm):
     company_name = StringField("Company Name", validators=[InputRequired()])
