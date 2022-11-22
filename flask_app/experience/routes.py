@@ -4,7 +4,8 @@ from flask import (
     render_template,
     redirect,
     url_for,
-    flash
+    flash,
+    session
 )
 from flask_app.experience.forms import CreateExperienceForm
 from flask_login import(
@@ -27,8 +28,13 @@ experience_blueprint = Blueprint(
 @experience_blueprint.route("/")
 @login_required
 def index():
+
+    experiences = Experience.objects()
+
     return render_template(
-        "experience.html", title=f"{current_user.username}\'s experience"
+        "experience.html", 
+        title=f"{current_user.username}\'s experiences",
+        experiences = experiences
     )
 
 @experience_blueprint.route("/create_experience", methods=["GET", "POST"])
@@ -62,11 +68,10 @@ def create_experience():
 )
 @login_required
 def view_experience(experience_creation_time):
-    # // KEEP OTHERS FROM VIEWING YOUR STUFF! ////
-    # if current_user.username != experience_owner_username:
-    #     flash("You can\'t view someone else\'s experience!")
-    #     return redirect(url_for('experience.index'))
-    # ////////////////////////////////////////////
+    session['url'] = url_for(
+        'experience.view_experience',
+        experience_creation_time = experience_creation_time
+    )
 
     experience = Experience.objects(
         owner = load_user(current_user.username),
@@ -88,7 +93,8 @@ def view_experience(experience_creation_time):
     )
 
     return render_template(
-        "view_experience.html", 
+        "view_experience.html",
+        title = "Experience Details",
         experience = experience, 
         tech_stack = tech_stack,
         bullet_points = bullet_points,

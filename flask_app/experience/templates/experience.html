@@ -1,6 +1,35 @@
 {% extends "header.html" %}
 {% block content %}
-<p>{{current_user.username}}'s Experience Page</p>
+    {% for experience in experiences %}
+        <div class="card mb-3">
+            <h3 class="card-header">{{experience.company_name}}</h3>
+            <div class="card-body">
+                <b>start date:</b>
+                {{experience.start_date}}
+                <br>
+                <b>end date:</b>
+                {{experience.end_date}}
+                <br>
+                <a 
+                    href="{{url_for(
+                        'experience.view_experience',
+                        experience_creation_time = experience.creation_time
+                    )}}"
+                    class="btn btn-primary mr-3"
+                >
+                    View Experience
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+    <a 
+        href="{{url_for(
+            'experience.create_experience'
+        )}}"
+        class="btn btn-primary mr-3"
+    >
+        Add Experience
+    </a>
 {% endblock %}
 
 
