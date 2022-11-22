@@ -16,6 +16,7 @@ from flask_app.models import (
     Experience,
     HomepageDetailsLink,
     ExperienceLink,
+    ExperienceBullet,
     load_user
 )
 from flask_app.common.forms import (
@@ -139,3 +140,25 @@ def delete_link(link_creation_time):
 
     return redirect(session['url'])
         
+@common_blueprint.route(
+    "/create_bullet/<link_model>/<related_document_creation_date>", methods=["GET", "POST"]
+)
+@login_required
+def create_bullet(link_model, related_document_creation_date):
+    create_bullet_form = CreateBulletForm()
+
+    if create_bullet_form.validate_on_submit():
+        new_bullet = None
+
+        related_experience = Experience.objects(
+            owner = load_user(current_user.username),
+            creation_time = related_document_creation_date
+        ).first()
+
+        if link_model == "ExperienceBullet":
+            new_bullet = ExperienceBullet(
+                owner = load_user(current_user.username),
+                creation_time = current_time(),
+                experience = related_experience,
+                content = create_bullet_form.content.data
+            )
