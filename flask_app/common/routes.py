@@ -21,7 +21,8 @@ from flask_app.models import (
 )
 from flask_app.common.forms import (
     CreateLinkForm,
-    UpdateLinkForm
+    UpdateLinkForm,
+    CreateBulletForm
 )
 from flask_app.utils import current_time
 
@@ -141,10 +142,10 @@ def delete_link(link_creation_time):
     return redirect(session['url'])
         
 @common_blueprint.route(
-    "/create_bullet/<link_model>/<related_document_creation_date>", methods=["GET", "POST"]
+    "/create_bullet/<bullet_model>/<related_document_creation_date>", methods=["GET", "POST"]
 )
 @login_required
-def create_bullet(link_model, related_document_creation_date):
+def create_bullet(bullet_model, related_document_creation_date):
     create_bullet_form = CreateBulletForm()
 
     if create_bullet_form.validate_on_submit():
@@ -155,10 +156,21 @@ def create_bullet(link_model, related_document_creation_date):
             creation_time = related_document_creation_date
         ).first()
 
-        if link_model == "ExperienceBullet":
+        if bullet_model == "ExperienceBullet":
             new_bullet = ExperienceBullet(
                 owner = load_user(current_user.username),
                 creation_time = current_time(),
                 experience = related_experience,
                 content = create_bullet_form.content.data
             )
+        
+        # TODO: 2nd case - Projects Bullet
+
+        new_bullet.save()
+        return redirect(session['url'])
+
+    return render_template(
+        "create_bullet.html",
+        form = create_bullet_form,
+        title = f"Create Link Form - {bullet_model}"
+    )

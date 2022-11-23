@@ -1,8 +1,7 @@
 import re
 from flask_wtf import FlaskForm
 from flask_app.utils import (
-    is_date,
-    url_regex
+    is_date
 )
 from wtforms import (
     StringField,
