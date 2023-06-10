@@ -18,6 +18,7 @@ class User(db.Document, UserMixin):
 class Link(db.Document):
     parent = db.GenericReferenceField(required=True)
     link_name = db.StringField(required=True)
+    url = db.URLField(required=True)
     creation_time = db.StringField(required=True)
 
     def get_id(self):
