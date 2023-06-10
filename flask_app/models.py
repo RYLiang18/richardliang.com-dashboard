@@ -1,13 +1,11 @@
-from flask_login import (
-    UserMixin,
-    current_user
-)
+from flask_login import UserMixin, current_user
 from flask_app import db, login_manager
 
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.objects(username=user_id).first()
+
 
 class User(db.Document, UserMixin):
     username = db.StringField(required=True, unique=True)
@@ -16,10 +14,14 @@ class User(db.Document, UserMixin):
     def get_id(self):
         return self.username
 
+
 class Link(db.Document):
-    owner = db.ReferenceField(User, required=True)
+    parent = db.GenericReferenceField(required=True)
+    link_name = db.StringField(required=True)
     creation_time = db.StringField(required=True)
 
+    def get_id(self):
+        return [self.parent.owner.username, self.creation_time]
 
 
 class HomepageDetailsLink(db.Document):
@@ -34,6 +36,7 @@ class HomepageDetailsLink(db.Document):
     def get_id(self):
         return [self.owner.username, self.creation_time]
 
+
 class HomepageDetails(db.Document):
     owner = db.ReferenceField(User, required=True)
     creation_time = db.StringField(required=True)
@@ -45,9 +48,10 @@ class HomepageDetails(db.Document):
 
     def get_id(self):
         return self.owner.username
-    
+
     def parse_about_me(self):
-        return self.about_me.split('\n')
+        return self.about_me.split("\n")
+
 
 class Experience(db.Document):
     owner = db.ReferenceField(User, required=True)
@@ -59,10 +63,11 @@ class Experience(db.Document):
     creation_time = db.StringField(required=True)
 
     def parse_about(self):
-        return self.about.split('\n')
-    
+        return self.about.split("\n")
+
     def get_id(self):
         return [self.owner.username, self.creation_time]
+
 
 class ExperienceTechnology(db.Document):
     owner = db.ReferenceField(User, required=True)
@@ -72,6 +77,7 @@ class ExperienceTechnology(db.Document):
 
     def get_id(self):
         return [self.owner.username, self.creation_time]
+
 
 class ExperienceBullet(db.Document):
     owner = db.ReferenceField(User, required=True)
@@ -84,6 +90,7 @@ class ExperienceBullet(db.Document):
 
     def get_id(self):
         return [self.owner.username, self.creation_time]
+
 
 class ExperienceLink(db.Document):
     owner = db.ReferenceField(User, required=True)
