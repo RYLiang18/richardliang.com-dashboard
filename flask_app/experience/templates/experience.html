@@ -10,10 +10,10 @@
                 <b>end date:</b>
                 {{experience.end_date}}
                 <br>
-                <a 
+                <a
                     href="{{url_for(
                         'experience.view_experience',
-                        experience_creation_time = experience.creation_time
+                        experience_creation_datetime = experience.creation_datetime
                     )}}"
                     class="btn btn-primary mr-3"
                 >
@@ -22,7 +22,7 @@
             </div>
         </div>
     {% endfor %}
-    <a 
+    <a
         href="{{url_for(
             'experience.create_experience'
         )}}"

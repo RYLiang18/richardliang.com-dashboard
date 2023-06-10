@@ -22,6 +22,7 @@ common_blueprint = Blueprint(
     "common", __name__, url_prefix="/common", template_folder="./templates"
 )
 
+parent_collections = [HomepageDetails, Experience]
 link_collections = [HomepageDetailsLink, ExperienceLink]
 bullet_collections = [ExperienceBullet]
 
@@ -44,40 +45,40 @@ def create_link(link_model, parent_document_creation_datetime=None):
         if link_model == "HomepageDetailsLink":
             parent_document = HomepageDetails.objects(
                 owner=load_user(current_user.username),
-                creation_time=parent_document_creation_datetime,
+                creation_datetime=parent_document_creation_datetime,
             ).first()
         elif link_model == "ExperienceLink":
             parent_document = Experience.objects(
                 owner=load_user(current_user.username),
-                creation_time=parent_document_creation_datetime,
+                creation_datetime=parent_document_creation_datetime,
             ).first()
 
         new_link = Link(
             parent=parent_document,
             link_name=create_link_form.link_name.data,
             url=create_link_form.url.data,
-            creation_time=current_time(),
+            creation_datetime=current_time(),
         )
 
         #     new_link = HomepageDetailsLink(
         #         owner=load_user(current_user.username),
         #         link_name=create_link_form.link_name.data,
         #         url=create_link_form.url.data,
-        #         creation_time=current_time(),
+        #         creation_datetime=current_time(),
         #     )
 
         # # CASE: Experience
         # elif link_model == "ExperienceLink":
         #     related_experience = Experience.objects(
         #         owner=load_user(current_user.username),
-        #         creation_time=related_document_creation_date,
+        #         creation_datetime=related_document_creation_date,
         #     ).first()
 
         #     new_link = ExperienceLink(
         #         owner=load_user(current_user.username),
         #         link_name=create_link_form.link_name.data,
         #         url=create_link_form.url.data,
-        #         creation_time=current_time(),
+        #         creation_datetime=current_time(),
         #         experience=related_experience,
         #     )
 
@@ -91,14 +92,28 @@ def create_link(link_model, parent_document_creation_datetime=None):
     )
 
 
+def get_link_document(parent_document_creation_datetime, link_creation_datetime):
+    parent_document = None
+    for parent_collection in parent_collections:
+        parent_document = parent_collection.objects(
+            owner=load_user(current_user.username),
+            creation_datetime=parent_document_creation_datetime,
+        ).first()
+        if parent_document is not None:
+            break
+    return Link.objects(
+        parent=parent_document, creation_datetime=link_creation_datetime
+    ).first()
+
+
 @common_blueprint.route(
-    "/update_link/<link_creation_datetime>", methods=["GET", "POST"]
+    "/update_link/<parent_document_creation_datetime>/<link_creation_datetime>",
+    methods=["GET", "POST"],
 )
 @login_required
-def update_link(link_creation_datetime):
-    link = Link.objects(
-        owner=load_user(current_user.username), creation_time=link_creation_datetime
-    )
+def update_link(parent_document_creation_datetime, link_creation_datetime):
+    # finding the parent
+    link = get_link_document(parent_document_creation_datetime, link_creation_datetime)
 
     if link is None:
         # TODO: return 404
@@ -118,7 +133,7 @@ def update_link(link_creation_datetime):
     # link = None
     # for link_collection in link_collections:
     #     link = link_collection.objects(
-    #         owner=load_user(current_user.username), creation_time=link_creation_time
+    #         owner=load_user(current_user.username), creation_datetime=link_creation_datetime
     #     ).first()
 
     #     if link is not None:
@@ -142,19 +157,24 @@ def update_link(link_creation_datetime):
     # )
 
 
-@common_blueprint.route("/delete_link/<link_creation_time>", methods=["GET", "POST"])
+@common_blueprint.route(
+    "/delete_link/<parent_document_creation_datetime>/<link_creation_datetime>",
+    methods=["GET", "POST"],
+)
 @login_required
-def delete_link(link_creation_time):
-    link = Link.objects(
-        owner=load_user(current_user.username), creation_time=link_creation_time
-    ).first()
+def delete_link(parent_document_creation_datetime, link_creation_datetime):
+    link = get_link_document(parent_document_creation_datetime, link_creation_datetime)
+
+    if link is None:
+        # TODO: return 404
+        pass
 
     if link is None:
         # TODO: return 404
         pass
     # for link_collection in link_collections:
     #     link = link_collection.objects(
-    #         owner=load_user(current_user.username), creation_time=link_creation_time
+    #         owner=load_user(current_user.username), creation_datetime=link_creation_datetime
     #     ).first()
 
     #     if link is not None:
@@ -183,12 +203,12 @@ def create_bullet(bullet_model, related_document_creation_date):
         if bullet_model == "ExperienceBullet":
             related_experience = Experience.objects(
                 owner=load_user(current_user.username),
-                creation_time=related_document_creation_date,
+                creation_datetime=related_document_creation_date,
             ).first()
 
             new_bullet = ExperienceBullet(
                 owner=load_user(current_user.username),
-                creation_time=current_time(),
+                creation_datetime=current_time(),
                 experience=related_experience,
                 content=create_bullet_form.content.data,
             )
@@ -206,14 +226,15 @@ def create_bullet(bullet_model, related_document_creation_date):
 
 
 @common_blueprint.route(
-    "/update_bullet/<bullet_creation_time>", methods=["GET", "POST"]
+    "/update_bullet/<bullet_creation_datetime>", methods=["GET", "POST"]
 )
 @login_required
-def update_bullet(bullet_creation_time):
+def update_bullet(bullet_creation_datetime):
     bullet = None
     for bullet_collection in bullet_collections:
         bullet = bullet_collection.objects(
-            owner=load_user(current_user.username), creation_time=bullet_creation_time
+            owner=load_user(current_user.username),
+            creation_datetime=bullet_creation_datetime,
         ).first()
 
         if bullet is not None:
@@ -236,14 +257,15 @@ def update_bullet(bullet_creation_time):
 
 
 @common_blueprint.route(
-    "/delete_bullet/<bullet_creation_time>", methods=["GET", "POST"]
+    "/delete_bullet/<bullet_creation_datetime>", methods=["GET", "POST"]
 )
 @login_required
-def delete_bullet(bullet_creation_time):
+def delete_bullet(bullet_creation_datetime):
     bullet = None
     for bullet_collection in bullet_collections:
         bullet = bullet_collection.objects(
-            owner=load_user(current_user.username), creation_time=bullet_creation_time
+            owner=load_user(current_user.username),
+            creation_datetime=bullet_creation_datetime,
         ).first()
 
         if bullet is not None:

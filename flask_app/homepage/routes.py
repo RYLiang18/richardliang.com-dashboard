@@ -3,37 +3,46 @@ from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 from flask_login import current_user, login_required
 
-from flask_app.homepage.forms import (AboutMeUpdateForm, DescriptionUpdateForm,
-                                      EmailUpdateForm, FullNameUpdateForm,
-                                      PFPLinkUpdateForm)
-from flask_app.models import (HomepageDetails, HomepageDetailsLink,  # Link
-                              load_user)
+from flask_app.homepage.forms import (
+    AboutMeUpdateForm,
+    DescriptionUpdateForm,
+    EmailUpdateForm,
+    FullNameUpdateForm,
+    PFPLinkUpdateForm,
+)
+from flask_app.models import HomepageDetails, Link, load_user  # Link
 from flask_app.utils import current_time
 
-homepage_blueprint = Blueprint("homepage", __name__, url_prefix='/homepage', template_folder='./templates')
+homepage_blueprint = Blueprint(
+    "homepage", __name__, url_prefix="/homepage", template_folder="./templates"
+)
+
 
 def matching_username(username):
     return current_user.username == username
 
+
 @homepage_blueprint.route("/")
 @login_required
 def index():
-    session['url'] = url_for('homepage.index')
+    session["url"] = url_for("homepage.index")
 
     homepage_details = HomepageDetails.objects(
         owner=load_user(current_user.username)
     ).first()
 
-    homepage_details_links = HomepageDetailsLink.objects(
-        owner=load_user(current_user.username)
-    )
+    homepage_details_links = Link.objects(parent=homepage_details)
+    # homepage_details_links = HomepageDetailsLink.objects(
+    #     owner=load_user(current_user.username)
+    # )
 
     return render_template(
         "homepage.html",
-        title=f"{current_user.username}\'s homepage",
-        homepage_details = homepage_details,
-        links = homepage_details_links
+        title=f"{current_user.username}'s homepage",
+        homepage_details=homepage_details,
+        links=homepage_details_links,
     )
+
 
 @homepage_blueprint.route("/update_full_name", methods=["GET", "POST"])
 @login_required
@@ -41,13 +50,16 @@ def update_full_name():
     full_name_update_form = FullNameUpdateForm()
     if full_name_update_form.validate_on_submit():
         homepage_details = HomepageDetails.objects(owner=current_user).first()
-        homepage_details.update(full_name = full_name_update_form.full_name.data)
+        homepage_details.update(full_name=full_name_update_form.full_name.data)
 
-        return redirect(url_for('homepage.index'))
+        return redirect(url_for("homepage.index"))
 
     return render_template(
-        "update_full_name.html", form=full_name_update_form, title="Homepage - Update Full Name"
+        "update_full_name.html",
+        form=full_name_update_form,
+        title="Homepage - Update Full Name",
     )
+
 
 @homepage_blueprint.route("/update_email", methods=["GET", "POST"])
 @login_required
@@ -56,9 +68,9 @@ def update_email():
 
     if email_update_form.validate_on_submit():
         homepage_details = HomepageDetails.objects(owner=current_user).first()
-        homepage_details.update(email = email_update_form.email.data)
+        homepage_details.update(email=email_update_form.email.data)
 
-        return redirect(url_for('homepage.index'))
+        return redirect(url_for("homepage.index"))
 
     return render_template(
         "update_email.html", form=email_update_form, title="Homepage - Update Email"
@@ -72,13 +84,16 @@ def update_pfp_link():
 
     if pfp_link_update_form.validate_on_submit():
         homepage_details = HomepageDetails.objects(owner=current_user).first()
-        homepage_details.update(pfp_link = pfp_link_update_form.url.data)
+        homepage_details.update(pfp_link=pfp_link_update_form.url.data)
 
-        return redirect(url_for('homepage.index'))
+        return redirect(url_for("homepage.index"))
 
     return render_template(
-        "update_pfp_link.html", form=pfp_link_update_form, title="Homepage - Update PFP Link"
+        "update_pfp_link.html",
+        form=pfp_link_update_form,
+        title="Homepage - Update PFP Link",
     )
+
 
 @homepage_blueprint.route("/update_description", methods=["GET", "POST"])
 @login_required
@@ -86,17 +101,20 @@ def update_description():
     homepage_details = HomepageDetails.objects(owner=current_user).first()
 
     description_update_form = DescriptionUpdateForm(
-        description = homepage_details.description
+        description=homepage_details.description
     )
 
     if description_update_form.validate_on_submit():
-        homepage_details.update(description = description_update_form.description.data)
+        homepage_details.update(description=description_update_form.description.data)
 
-        return redirect(url_for('homepage.index'))
+        return redirect(url_for("homepage.index"))
 
     return render_template(
-        "update_description.html", form=description_update_form, title="Homepage - Update Description"
+        "update_description.html",
+        form=description_update_form,
+        title="Homepage - Update Description",
     )
+
 
 # not in use anymore
 # @homepage_blueprint.route(
@@ -139,13 +157,13 @@ def update_description():
 def delete_personal_link(link_owner_username, link_datetime_str):
     # // KEEP OTHERS FROM EDITING YOUR LINKS! ////
     if current_user.username != link_owner_username:
-        flash("You can\'t edit someone else\'s link!")
-        return redirect(url_for('homepage.index'))
+        flash("You can't edit someone else's link!")
+        return redirect(url_for("homepage.index"))
     # ////////////////////////////////////////////
 
     # delete the link
     personal_link = Link.objects(
-        owner=load_user(link_owner_username), datetime_str = link_datetime_str
+        owner=load_user(link_owner_username), datetime_str=link_datetime_str
     ).first()
     personal_link_pk = personal_link.pk
     personal_link.delete()
@@ -154,7 +172,8 @@ def delete_personal_link(link_owner_username, link_datetime_str):
     # there is no cascading delete in mongodb I guess
     HomepageDetails.objects().update_one(pull__links=personal_link_pk)
 
-    return redirect(url_for('homepage.index'))
+    return redirect(url_for("homepage.index"))
+
 
 @homepage_blueprint.route("/add_link", methods=["GET", "POST"])
 @login_required
@@ -163,10 +182,10 @@ def add_personal_link():
 
     if link_add_form.validate_on_submit():
         new_link = Link(
-            owner = load_user(current_user.username),
-            link_name = link_add_form.link_name.data,
-            url = link_add_form.url.data,
-            datetime_str = current_time()
+            owner=load_user(current_user.username),
+            link_name=link_add_form.link_name.data,
+            url=link_add_form.url.data,
+            datetime_str=current_time(),
         )
         new_link.save()
 
@@ -174,28 +193,27 @@ def add_personal_link():
         homepage_details.links.append(new_link)
         homepage_details.save()
 
-        return redirect(url_for('homepage.index'))
+        return redirect(url_for("homepage.index"))
 
     return render_template(
         "add_personal_link.html", form=link_add_form, title="Homepage - Add New Link"
     )
+
 
 @homepage_blueprint.route("/update_about_me", methods=["GET", "POST"])
 @login_required
 def update_about_me():
     homepage_details = HomepageDetails.objects(owner=current_user).first()
 
-    about_me_update_form = AboutMeUpdateForm(
-        about_me = homepage_details.about_me
-    )
+    about_me_update_form = AboutMeUpdateForm(about_me=homepage_details.about_me)
 
     if about_me_update_form.validate_on_submit():
-        homepage_details.update(
-            about_me = about_me_update_form.about_me.data
-        )
+        homepage_details.update(about_me=about_me_update_form.about_me.data)
 
-        return redirect(url_for('homepage.index'))
+        return redirect(url_for("homepage.index"))
 
     return render_template(
-        "update_about_me.html", form=about_me_update_form, title="Homepage - Update About Me"
+        "update_about_me.html",
+        form=about_me_update_form,
+        title="Homepage - Update About Me",
     )

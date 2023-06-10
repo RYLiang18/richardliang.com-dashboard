@@ -34,8 +34,8 @@
         <div class="row">
             <div class="col"></div>
             <div class="col">
-                <img 
-                    src="{{homepage_details.pfp_link}}" 
+                <img
+                    src="{{homepage_details.pfp_link}}"
                     alt="imgur profile picture"
                     class="card-img-top rounded-circle py-3"
                 >
@@ -77,28 +77,28 @@
                             </div>
                             <div class = "col">
                                 <div class="float-end">
-                                    {% with link_id = link.get_id() %}
-                                        <a 
-                                            href="{{url_for(
-                                                'common.update_link',
-                                                link_creation_time = link_id[1]
-                                            )}}" 
-                                            class="btn btn-primary mr-3"
-                                        >
-                                            Edit
-                                        </a>
+                                    <a
+                                        href="{{url_for(
+                                            'common.update_link',
+                                            parent_document_creation_datetime = link.parent.creation_datetime,
+                                            link_creation_datetime = link.creation_datetime
+                                        )}}"
+                                        class="btn btn-primary mr-3"
+                                    >
+                                        Edit
+                                    </a>
 
-                                        <!-- TODO -->
-                                        <a 
-                                            href="{{url_for(
-                                                'common.delete_link',
-                                                link_creation_time = link_id[1]
-                                            )}}" 
-                                            class="btn btn-danger"
-                                        >
-                                            Delete
-                                        </a>
-                                    {% endwith %}
+                                    <!-- TODO -->
+                                    <a
+                                        href="{{url_for(
+                                            'common.delete_link',
+                                            parent_document_creation_datetime = link.parent.creation_datetime,
+                                            link_creation_datetime = link.creation_datetime
+                                        )}}"
+                                        class="btn btn-danger"
+                                    >
+                                        Delete
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -106,11 +106,12 @@
                 {% endfor %}
             </ul>
             <!-- TODO -->
-            <a 
+            <a
                 href="{{url_for(
                     'common.create_link',
-                    link_model = 'HomepageDetailsLink'
-                )}}" 
+                    link_model = 'HomepageDetailsLink',
+                    parent_document_creation_datetime = homepage_details.creation_datetime
+                )}}"
                 class="btn btn-primary"
             >
                 Add Link
