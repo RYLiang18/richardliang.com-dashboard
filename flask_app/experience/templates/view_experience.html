@@ -77,21 +77,19 @@
                             </div>
                             <div class = "col">
                                 <div class="float-end">
-                                    {% with id = technology.get_id() %}
-                                        <!-- TODO -->
-                                        <a
-                                            href="#"
-                                            class="btn btn-primary mr-3">
-                                            Edit
-                                        </a>
+                                    <!-- TODO -->
+                                    <a
+                                        href="#"
+                                        class="btn btn-primary mr-3">
+                                        Edit
+                                    </a>
 
-                                        <!-- TODO -->
-                                        <a
-                                            href="#"
-                                            class="btn btn-danger">
-                                            Delete
-                                        </a>
-                                    {% endwith %}
+                                    <!-- TODO -->
+                                    <a
+                                        href="#"
+                                        class="btn btn-danger">
+                                        Delete
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -118,28 +116,26 @@
                         </div>
                         <div class = "col">
                             <div class="float-end">
-                                {% with bullet_id = bullet.get_id() %}
-                                    <a
-                                        href="{{url_for(
-                                            'common.update_bullet',
-                                            bullet_creation_datetime = bullet_id[1]
-                                        )}}"
-                                        class="btn btn-primary mr-3"
-                                    >
-                                        Edit
-                                    </a>
+                                <a
+                                    href="{{url_for(
+                                        'common.update_bullet',
+                                        bullet_creation_datetime = bullet.creation_datetime
+                                    )}}"
+                                    class="btn btn-primary mr-3"
+                                >
+                                    Edit
+                                </a>
 
-                                    <!-- TODO -->
-                                    <a
-                                        href="{{url_for(
-                                            'common.delete_bullet',
-                                            bullet_creation_datetime = bullet_id[1]
-                                        )}}"
-                                        class="btn btn-danger"
-                                    >
-                                        Delete
-                                    </a>
-                                {% endwith %}
+                                <!-- TODO -->
+                                <a
+                                    href="{{url_for(
+                                        'common.delete_bullet',
+                                        bullet_creation_datetime = bullet.creation_datetime
+                                    )}}"
+                                    class="btn btn-danger"
+                                >
+                                    Delete
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -151,7 +147,7 @@
                 href="{{url_for(
                     'common.create_bullet',
                     bullet_model = 'ExperienceBullet',
-                    related_document_creation_date = experience.get_id()[1]
+                    related_document_creation_date = experience.creation_datetime
                 )}}"
                 class="btn btn-primary"
             >
@@ -173,28 +169,28 @@
                             </div>
                             <div class = "col">
                                 <div class="float-end">
-                                    {% with link_id = link.get_id() %}
-                                        <a
-                                            href="{{url_for(
-                                                'common.update_link',
-                                                link_creation_datetime = link_id[1]
-                                            )}}"
-                                            class="btn btn-primary mr-3"
-                                        >
-                                            Edit
-                                        </a>
+                                    <a
+                                        href="{{url_for(
+                                            'common.update_link',
+                                            parent_document_creation_datetime = link.parent.creation_datetime,
+                                            link_creation_datetime = link.creation_datetime
+                                        )}}"
+                                        class="btn btn-primary mr-3"
+                                    >
+                                        Edit
+                                    </a>
 
-                                        <!-- TODO -->
-                                        <a
-                                            href="{{url_for(
-                                                'common.delete_link',
-                                                link_creation_datetime = link_id[1]
-                                            )}}"
-                                            class="btn btn-danger"
-                                        >
-                                            Delete
-                                        </a>
-                                    {% endwith %}
+                                    <!-- TODO -->
+                                    <a
+                                        href="{{url_for(
+                                            'common.delete_link',
+                                            parent_document_creation_datetime = link.parent.creation_datetime,
+                                            link_creation_datetime = link.creation_datetime
+                                        )}}"
+                                        class="btn btn-danger"
+                                    >
+                                        Delete
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -206,7 +202,7 @@
                 href="{{url_for(
                     'common.create_link',
                     link_model = 'ExperienceLink',
-                    related_document_creation_date = experience.get_id()[1]
+                    parent_document_creation_datetime = experience.creation_datetime
                 )}}"
                 class="btn btn-primary"
             >
