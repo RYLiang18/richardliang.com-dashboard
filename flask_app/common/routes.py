@@ -145,14 +145,16 @@ def delete_link(parent_document_creation_datetime, link_creation_datetime):
 
 
 @common_blueprint.route(
-    "/create_bullet/<parent_model>/<parent_document_creation_datetime>",
+    "/create_string_content/<parent_model>/<parent_document_creation_datetime>/<content_type>",
     methods=["GET", "POST"],
 )
 @login_required
-def create_bullet(parent_model, parent_document_creation_datetime):
-    create_bullet_form = CreateStringContentForm()
+def create_string_content(
+    parent_model, parent_document_creation_datetime, content_type
+):
+    create_string_content_form = CreateStringContentForm()
 
-    if create_bullet_form.validate_on_submit():
+    if create_string_content_form.validate_on_submit():
         parent_document = None
 
         if parent_model == "Experience":
@@ -161,87 +163,79 @@ def create_bullet(parent_model, parent_document_creation_datetime):
                 creation_datetime=parent_document_creation_datetime,
             ).first()
 
-        new_bullet = StringContent(
+        new_string_content_document = StringContent(
             parent=parent_document,
-            content_type=bullet_type,
-            content=create_bullet_form.content.data,
+            content_type=content_type,
+            content=create_string_content_form.content.data,
             creation_datetime=current_time(),
         )
 
-        new_bullet.save()
+        new_string_content_document.save()
         return redirect(session["url"])
 
     return render_template(
-        "create_bullet.html",
-        form=create_bullet_form,
-        title=f"Create Bullet Form - {parent_model} bullet",
+        "create_string_content.html",
+        form=create_string_content_form,
+        title=f"{parent_model} - Create {content_type}",
     )
 
 
 @common_blueprint.route(
-    "/update_bullet/<parent_document_creation_datetime>/<bullet_creation_datetime>",
+    "/update_string_content/<parent_document_creation_datetime>/<string_content_creation_datetime>/<content_type>",
     methods=["GET", "POST"],
 )
 @login_required
-def update_bullet(parent_document_creation_datetime, bullet_creation_datetime):
-    bullet = get_target_document(
+def update_string_content(
+    parent_document_creation_datetime, string_content_creation_datetime, content_type
+):
+    string_content_document = get_target_document(
         parent_document_creation_datetime,
-        bullet_creation_datetime,
+        string_content_creation_datetime,
         string_content_parent_collections,
         StringContent,
-        bullet_type,
+        content_type,
     )
 
-    if bullet is None:
+    if string_content_document is None:
         # TODO: return 404
         pass
 
-    update_bullet_form = UpdateStringContentForm(content=bullet.content)
+    update_string_content_form = UpdateStringContentForm(
+        content=string_content_document.content
+    )
 
-    if update_bullet_form.validate_on_submit():
-        bullet.update(content=update_bullet_form.content.data)
+    if update_string_content_form.validate_on_submit():
+        string_content_document.update(content=update_string_content_form.content.data)
 
         return redirect(session["url"])
 
     return render_template(
-        "update_bullet.html", form=update_bullet_form, title="Update Bullet Form"
+        "update_string_content.html",
+        form=update_string_content_form,
+        title=f"Update {content_type}",
     )
 
 
 @common_blueprint.route(
-    "/delete_bullet/<parent_document_creation_datetime>/<bullet_creation_datetime>",
+    "/delete_string_content/<parent_document_creation_datetime>/<string_content_creation_datetime>/<content_type>",
     methods=["GET", "POST"],
 )
 @login_required
-def delete_bullet(parent_document_creation_datetime, bullet_creation_datetime):
-    bullet = get_target_document(
+def delete_string_content(
+    parent_document_creation_datetime, string_content_creation_datetime, content_type
+):
+    string_content_document = get_target_document(
         parent_document_creation_datetime,
-        bullet_creation_datetime,
+        string_content_creation_datetime,
         string_content_parent_collections,
         StringContent,
-        bullet_type,
+        content_type,
     )
 
-    if bullet is None:
+    if string_content_document is None:
         # TODO: return 404
         pass
 
-    bullet.delete()
+    string_content_document.delete()
 
     return redirect(session["url"])
-
-
-@common_blueprint.route(
-    "/create_technology/<technology_model>/<related_document_creation_date>",
-    methods=["GET", "POST"],
-)
-@login_required
-def create_technology(technology_model, related_document_creation_date):
-    create_technology_form = CreateStringContentForm()
-
-    if create_technology_form.validate_on_submit():
-        new_technology = None
-
-        if technology_model == "ExperienceTechnology":
-            pass
-            # TODO: left off here

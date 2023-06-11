@@ -70,15 +70,26 @@ def view_experience(experience_creation_datetime):
         # TODO: return 404
         pass
 
-    tech_stack = StringContent.objects(parent=experience, content_type=technology_type)
-    bullet_points = StringContent.objects(parent=experience, content_type=bullet_type)
+    string_contents = {
+        technology_type: StringContent.objects(
+            parent=experience, content_type=technology_type
+        ),
+        bullet_type: StringContent.objects(parent=experience, content_type=bullet_type),
+    }
+    string_content_headers = {
+        technology_type: "Tech Stack",
+        bullet_type: "Bullet Points",
+    }
     experienceLinks = Link.objects(parent=experience)
 
     return render_template(
         "view_experience.html",
         title="Experience Details",
         experience=experience,
-        tech_stack=tech_stack,
-        bullet_points=bullet_points,
+        string_contents=string_contents,
+        string_content_headers=string_content_headers,
+        string_content_types=[technology_type, bullet_type],
         links=experienceLinks,
+        bullet_type=bullet_type,
+        technology_type=technology_type,
     )
