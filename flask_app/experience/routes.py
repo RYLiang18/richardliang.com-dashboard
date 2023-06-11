@@ -3,15 +3,9 @@ from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 from flask_login import current_user, login_required
 
+from flask_app.constants import bullet_type, technology_type
 from flask_app.experience.forms import CreateExperienceForm
-from flask_app.models import (
-    Experience,
-    ExperienceBullet,
-    ExperienceLink,
-    ExperienceTechnology,
-    Link,
-    load_user,
-)
+from flask_app.models import Experience, Link, StringContent, load_user
 from flask_app.utils import current_time
 
 experience_blueprint = Blueprint(
@@ -76,13 +70,9 @@ def view_experience(experience_creation_datetime):
         # TODO: return 404
         pass
 
-    tech_stack = ExperienceTechnology.objects(experience=experience)
-    bullet_points = ExperienceBullet.objects(experience=experience)
+    tech_stack = StringContent.objects(parent=experience, content_type=technology_type)
+    bullet_points = StringContent.objects(parent=experience, content_type=bullet_type)
     experienceLinks = Link.objects(parent=experience)
-
-    # ExperienceLink.objects(
-    #     experience = experience
-    # )
 
     return render_template(
         "view_experience.html",

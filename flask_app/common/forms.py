@@ -1,20 +1,11 @@
+import re
+
 from flask_wtf import FlaskForm
-from wtforms import (
-    StringField,
-    SubmitField,
-    TextAreaField
-)
-from wtforms.fields import (
-    URLField,
-    EmailField
-)
-from wtforms.validators import (
-    InputRequired,
-    ValidationError
-)
+from wtforms import StringField, SubmitField, TextAreaField
+from wtforms.fields import EmailField, URLField
+from wtforms.validators import InputRequired, ValidationError
 
 from flask_app.utils import is_url
-import re
 
 
 class BaseLinkForm(FlaskForm):
@@ -25,17 +16,22 @@ class BaseLinkForm(FlaskForm):
         if not is_url(field.data):
             raise ValidationError("URL must be formatted correctly")
 
+
 class CreateLinkForm(BaseLinkForm):
     submit = SubmitField("Add")
+
 
 class UpdateLinkForm(BaseLinkForm):
     update = SubmitField("Update")
 
-class BaseContentForm(FlaskForm):
+
+class BaseStringContentForm(FlaskForm):
     content = StringField("Content", validators=[InputRequired()])
 
-class CreateContentForm(BaseContentForm):
+
+class CreateStringContentForm(BaseStringContentForm):
     submit = SubmitField("Add")
 
-class UpdateContentForm(BaseContentForm):
+
+class UpdateStringContentForm(BaseStringContentForm):
     update = SubmitField("Update")
