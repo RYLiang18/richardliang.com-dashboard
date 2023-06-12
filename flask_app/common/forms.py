@@ -8,6 +8,11 @@ from wtforms.validators import InputRequired, ValidationError
 from flask_app.utils import is_url
 
 
+class UpdateNameForm:
+    name = StringField("Name", validators=[InputRequired()])
+    update = SubmitField("Update")
+
+
 class BaseLinkForm(FlaskForm):
     link_name = StringField("Link Name", validators=[InputRequired()])
     url = URLField("Link URL", validators=[InputRequired()])
