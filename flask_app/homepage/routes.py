@@ -44,6 +44,7 @@ def index():
     )
 
 
+# deprecated
 @homepage_blueprint.route("/update_full_name", methods=["GET", "POST"])
 @login_required
 def update_full_name():

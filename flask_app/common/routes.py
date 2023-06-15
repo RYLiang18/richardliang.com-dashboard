@@ -24,11 +24,11 @@ model_map = {"homepage_details": HomepageDetails, "experience": Experience}
 
 
 @common_blueprint.route(
-    "/update_name_property/<model>/<document_creation_datetime>/<property_name>",
+    "/update_name_like_property/<model>/<document_creation_datetime>/<property_name>",
     methods=["GET", "POST"],
 )
 @login_required
-def update_name_property(model, document_creation_datetime, property_name):
+def update_name_like_property(model, document_creation_datetime, property_name):
     document = (
         model_map[model]
         .objects(
@@ -56,7 +56,6 @@ def update_name_property(model, document_creation_datetime, property_name):
         form=update_string_content_form,
         title=f"Update {document.__class__.__name__} - {property_name}",
     )
-    # left off here
 
 
 @common_blueprint.route(

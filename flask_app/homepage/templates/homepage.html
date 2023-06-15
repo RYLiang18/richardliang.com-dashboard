@@ -10,7 +10,7 @@
             <!-- TODO -->
             <a
                 href="{{url_for(
-                    'common.update_name_property',
+                    'common.update_name_like_property',
                     model = 'homepage_details',
                     document_creation_datetime = homepage_details.creation_datetime,
                     property_name = 'full_name'
@@ -29,7 +29,9 @@
                 {{homepage_details.email}}
             </h5>
             <!-- TODO -->
-            <a href="{{url_for('homepage.update_email')}}" class="btn btn-primary">
+            <a
+                href="{{url_for('homepage.update_email')}}"
+                class="btn btn-primary">
                 Edit Email
             </a>
         </div>

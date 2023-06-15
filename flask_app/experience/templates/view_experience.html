@@ -8,7 +8,14 @@
                 {{experience.company_name}}
             </h5>
             <!-- TODO -->
-            <a href="#" class="btn btn-primary">
+            <a
+                href="{{url_for(
+                    'common.update_name_like_property',
+                    model = 'experience',
+                    document_creation_datetime = experience.creation_datetime,
+                    property_name = 'company_name'
+                )}}"
+                class="btn btn-primary">
                 Edit
             </a>
         </div>
@@ -22,7 +29,14 @@
                 {{experience.position}}
             </h5>
             <!-- TODO -->
-            <a href="#" class="btn btn-primary">
+            <a
+                href= "{{url_for(
+                    'common.update_name_like_property',
+                    model = 'experience',
+                    document_creation_datetime = experience.creation_datetime,
+                    property_name = 'position'
+                )}}"
+                class="btn btn-primary">
                 Edit
             </a>
         </div>
