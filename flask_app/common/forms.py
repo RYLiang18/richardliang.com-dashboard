@@ -5,12 +5,7 @@ from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.fields import EmailField, URLField
 from wtforms.validators import InputRequired, ValidationError
 
-from flask_app.utils import is_url
-
-
-class UpdateNameForm:
-    name = StringField("Name", validators=[InputRequired()])
-    update = SubmitField("Update")
+from flask_app.utils import is_date, is_url
 
 
 class BaseLinkForm(FlaskForm):
@@ -40,3 +35,14 @@ class CreateStringContentForm(BaseStringContentForm):
 
 class UpdateStringContentForm(BaseStringContentForm):
     update = SubmitField("Update")
+
+
+class UpdateDateForm(FlaskForm):
+    content = StringField("Date", validators=[InputRequired()])
+    update = SubmitField("Update")
+
+    def validate_content(form, field):
+        if not is_date(field.data):
+            raise ValidationError(
+                'Date must be in the format "MM/DD/YYYY" or "present"'
+            )

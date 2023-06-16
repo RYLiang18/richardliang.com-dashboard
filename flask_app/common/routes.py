@@ -6,8 +6,8 @@ from flask_login import current_user, login_required
 from flask_app.common.forms import (
     CreateLinkForm,
     CreateStringContentForm,
+    UpdateDateForm,
     UpdateLinkForm,
-    UpdateNameForm,
     UpdateStringContentForm,
 )
 from flask_app.models import Experience, HomepageDetails, Link, StringContent, load_user
@@ -20,6 +20,37 @@ common_blueprint = Blueprint(
 link_parent_collections = [HomepageDetails, Experience]
 string_content_parent_collections = [Experience]
 model_map = {"HomepageDetails": HomepageDetails, "Experience": Experience}
+
+
+@common_blueprint.route(
+    "/update_date/<model>/<document_creation_datetime>/<property_name>",
+    methods=["GET", "POST"],
+)
+@login_required
+def update_date(model, document_creation_datetime, property_name):
+    document = (
+        model_map[model]
+        .objects(
+            owner=load_user(current_user.username),
+            creation_datetime=document_creation_datetime,
+        )
+        .first()
+    )
+
+    if document is None:
+        # TODO: return 404
+        pass
+
+    update_date_form = UpdateDateForm(content=getattr(document, property_name))
+    if update_date_form.validate_on_submit():
+        document.update(**{property_name: update_date_form.content.data})
+        return redirect(session["url"])
+
+    return render_template(
+        "update_string_content.html",
+        form=update_date_form,
+        title=f"Update {document.__class__.__name__} - {property_name}",
+    )
 
 
 @common_blueprint.route(

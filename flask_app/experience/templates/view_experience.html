@@ -53,7 +53,14 @@
                         {{experience.start_date}}
                     </h5>
                     <!-- TODO -->
-                    <a href="#" class="btn btn-primary">
+                    <a
+                        href="{{url_for(
+                            'common.update_date',
+                            model = 'Experience',
+                            document_creation_datetime = experience.creation_datetime,
+                            property_name = 'start_date'
+                        )}}"
+                        class="btn btn-primary">
                         Edit
                     </a>
                 </div>
@@ -70,7 +77,14 @@
                         {{experience.end_date}}
                     </h5>
                     <!-- TODO -->
-                    <a href="#" class="btn btn-primary">
+                    <a
+                        href="{{url_for(
+                            'common.update_date',
+                            model = 'Experience',
+                            document_creation_datetime = experience.creation_datetime,
+                            property_name = 'end_date'
+                        )}}"
+                        class="btn btn-primary">
                         Edit
                     </a>
                 </div>
