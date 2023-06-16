@@ -25,21 +25,22 @@ class UpdateLinkForm(BaseLinkForm):
     update = SubmitField("Update")
 
 
-class BaseStringContentForm(FlaskForm):
+class SubmitSimpleStringContentForm(FlaskForm):
     content = StringField("Content", validators=[InputRequired()])
+    submit = SubmitField("Submit")
 
 
-class CreateStringContentForm(BaseStringContentForm):
-    submit = SubmitField("Add")
+# class CreateStringContentForm(BaseStringContentForm):
+#     submit = SubmitField("Add")
 
 
-class UpdateStringContentForm(BaseStringContentForm):
-    update = SubmitField("Update")
+# class UpdateStringContentForm(BaseStringContentForm):
+#     update = SubmitField("Update")
 
 
 class UpdateDateForm(FlaskForm):
     content = StringField("Date", validators=[InputRequired()])
-    update = SubmitField("Update")
+    submit = SubmitField("Update")
 
     def validate_content(form, field):
         if not is_date(field.data):

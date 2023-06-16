@@ -108,7 +108,7 @@
                                 <div class="float-end">
                                     <a
                                         href="{{url_for(
-                                            'common.update_string_content',
+                                            'common.update_child_string_content',
                                             parent_document_creation_datetime = string_content.parent.creation_datetime,
                                             string_content_creation_datetime = string_content.creation_datetime,
                                             content_type = string_content_type
@@ -138,7 +138,7 @@
 
                 <a
                     href="{{url_for(
-                        'common.create_string_content',
+                        'common.create_child_string_content',
                         parent_model = 'Experience',
                         parent_document_creation_datetime = experience.creation_datetime,
                         content_type = string_content_type

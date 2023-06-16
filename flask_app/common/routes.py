@@ -5,10 +5,9 @@ from flask_login import current_user, login_required
 
 from flask_app.common.forms import (
     CreateLinkForm,
-    CreateStringContentForm,
+    SubmitSimpleStringContentForm,
     UpdateDateForm,
     UpdateLinkForm,
-    UpdateStringContentForm,
 )
 from flask_app.models import Experience, HomepageDetails, Link, StringContent, load_user
 from flask_app.utils import current_time
@@ -47,7 +46,7 @@ def update_date(model, document_creation_datetime, property_name):
         return redirect(session["url"])
 
     return render_template(
-        "update_string_content.html",
+        "submit_simple_content.html",
         form=update_date_form,
         title=f"Update {document.__class__.__name__} - {property_name}",
     )
@@ -72,18 +71,18 @@ def update_name_like_property(model, document_creation_datetime, property_name):
         # TODO: return 404
         pass
 
-    update_string_content_form = UpdateStringContentForm(
+    update_name_like_property_form = SubmitSimpleStringContentForm(
         content=getattr(document, property_name)
     )
 
-    if update_string_content_form.validate_on_submit():
-        document.update(**{property_name: update_string_content_form.content.data})
+    if update_name_like_property_form.validate_on_submit():
+        document.update(**{property_name: update_name_like_property_form.content.data})
 
         return redirect(session["url"])
 
     return render_template(
-        "update_string_content.html",
-        form=update_string_content_form,
+        "submit_simple_content.html",
+        form=update_name_like_property_form,
         title=f"Update {document.__class__.__name__} - {property_name}",
     )
 
@@ -204,14 +203,14 @@ def delete_link(parent_document_creation_datetime, link_creation_datetime):
 
 
 @common_blueprint.route(
-    "/create_string_content/<parent_model>/<parent_document_creation_datetime>/<content_type>",
+    "/create_child_string_content/<parent_model>/<parent_document_creation_datetime>/<content_type>",
     methods=["GET", "POST"],
 )
 @login_required
-def create_string_content(
+def create_child_string_content(
     parent_model, parent_document_creation_datetime, content_type
 ):
-    create_string_content_form = CreateStringContentForm()
+    create_string_content_form = SubmitSimpleStringContentForm()
 
     if create_string_content_form.validate_on_submit():
         parent_document = (
@@ -234,21 +233,21 @@ def create_string_content(
         return redirect(session["url"])
 
     return render_template(
-        "create_string_content.html",
+        "submit_simple_content.html",
         form=create_string_content_form,
         title=f"{parent_model} - Create {content_type}",
     )
 
 
 @common_blueprint.route(
-    "/update_string_content/<parent_document_creation_datetime>/<string_content_creation_datetime>/<content_type>",
+    "/update_child_string_content/<parent_document_creation_datetime>/<string_content_creation_datetime>/<content_type>",
     methods=["GET", "POST"],
 )
 @login_required
-def update_string_content(
+def update_child_string_content(
     parent_document_creation_datetime, string_content_creation_datetime, content_type
 ):
-    string_content_document = get_child_document(
+    child_string_content_document = get_child_document(
         parent_document_creation_datetime,
         string_content_creation_datetime,
         string_content_parent_collections,
@@ -256,21 +255,23 @@ def update_string_content(
         content_type,
     )
 
-    if string_content_document is None:
+    if child_string_content_document is None:
         # TODO: return 404
         pass
 
-    update_string_content_form = UpdateStringContentForm(
-        content=string_content_document.content
+    update_string_content_form = SubmitSimpleStringContentForm(
+        content=child_string_content_document.content
     )
 
     if update_string_content_form.validate_on_submit():
-        string_content_document.update(content=update_string_content_form.content.data)
+        child_string_content_document.update(
+            content=update_string_content_form.content.data
+        )
 
         return redirect(session["url"])
 
     return render_template(
-        "update_string_content.html",
+        "submit_simple_content.html",
         form=update_string_content_form,
         title=f"Update {content_type}",
     )
@@ -284,7 +285,7 @@ def update_string_content(
 def delete_string_content(
     parent_document_creation_datetime, string_content_creation_datetime, content_type
 ):
-    string_content_document = get_child_document(
+    child_string_content_document = get_child_document(
         parent_document_creation_datetime,
         string_content_creation_datetime,
         string_content_parent_collections,
@@ -292,10 +293,10 @@ def delete_string_content(
         content_type,
     )
 
-    if string_content_document is None:
+    if child_string_content_document is None:
         # TODO: return 404
         pass
 
-    string_content_document.delete()
+    child_string_content_document.delete()
 
     return redirect(session["url"])
