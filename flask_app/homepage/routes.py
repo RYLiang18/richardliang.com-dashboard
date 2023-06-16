@@ -72,7 +72,7 @@ def update_pfp_link():
     return render_template(
         "submit_simple_content.html",
         form=pfp_link_update_form,
-        title="Homepage - Update PFP Link",
+        title="Homepage - Update Profile Picture Link",
     )
 
 

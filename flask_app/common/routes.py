@@ -9,7 +9,7 @@ from flask_app.common.forms import (
     UpdateDateForm,
 )
 from flask_app.models import Experience, HomepageDetails, Link, StringContent, load_user
-from flask_app.utils import current_time
+from flask_app.utils import current_time, translate
 
 common_blueprint = Blueprint(
     "common", __name__, url_prefix="/common", template_folder="./templates"
@@ -47,7 +47,7 @@ def update_date(model, document_creation_datetime, property_name):
     return render_template(
         "submit_simple_content.html",
         form=update_date_form,
-        title=f"Update {document.__class__.__name__} - {property_name}",
+        title=f"Update {translate(document.__class__.__name__)} - {translate(property_name)}",
     )
 
 
@@ -82,7 +82,7 @@ def update_name_like_property(model, document_creation_datetime, property_name):
     return render_template(
         "submit_simple_content.html",
         form=update_name_like_property_form,
-        title=f"Update {document.__class__.__name__} - {property_name}",
+        title=f"Update {translate(document.__class__.__name__)} - {translate(property_name)}",
     )
 
 
@@ -117,7 +117,7 @@ def create_link(parent_model, parent_document_creation_datetime=None):
     return render_template(
         "submit_link.html",
         form=create_link_form,
-        title=f"Create Link Form - {parent_model}",
+        title=f"Create Link Form - {translate(parent_model)}",
     )
 
 
@@ -234,7 +234,7 @@ def create_child_string_content(
     return render_template(
         "submit_simple_content.html",
         form=create_string_content_form,
-        title=f"{parent_model} - Create {content_type}",
+        title=f"{translate(parent_model)} - Create {translate(content_type)}",
     )
 
 
@@ -272,7 +272,7 @@ def update_child_string_content(
     return render_template(
         "submit_simple_content.html",
         form=update_string_content_form,
-        title=f"Update {content_type}",
+        title=f"Update {translate(content_type)}",
     )
 
 
