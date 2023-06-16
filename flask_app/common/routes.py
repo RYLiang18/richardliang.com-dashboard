@@ -4,10 +4,9 @@ from flask import Blueprint, flash, redirect, render_template, request, session,
 from flask_login import current_user, login_required
 
 from flask_app.common.forms import (
-    CreateLinkForm,
+    SubmitLinkForm,
     SubmitSimpleStringContentForm,
     UpdateDateForm,
-    UpdateLinkForm,
 )
 from flask_app.models import Experience, HomepageDetails, Link, StringContent, load_user
 from flask_app.utils import current_time
@@ -93,7 +92,7 @@ def update_name_like_property(model, document_creation_datetime, property_name):
 )
 @login_required
 def create_link(parent_model, parent_document_creation_datetime=None):
-    create_link_form = CreateLinkForm()
+    create_link_form = SubmitLinkForm()
 
     if create_link_form.validate_on_submit():
         parent_document = (
@@ -116,7 +115,7 @@ def create_link(parent_model, parent_document_creation_datetime=None):
         return redirect(session["url"])
 
     return render_template(
-        "create_link.html",
+        "submit_link.html",
         form=create_link_form,
         title=f"Create Link Form - {parent_model}",
     )
@@ -167,7 +166,7 @@ def update_link(parent_document_creation_datetime, link_creation_datetime):
         # TODO: return 404
         pass
 
-    update_link_form = UpdateLinkForm(link_name=link.link_name, url=link.url)
+    update_link_form = SubmitLinkForm(link_name=link.link_name, url=link.url)
 
     if update_link_form.validate_on_submit():
         link.update(
@@ -176,7 +175,7 @@ def update_link(parent_document_creation_datetime, link_creation_datetime):
         return redirect(session["url"])
 
     return render_template(
-        "update_link.html", form=update_link_form, title="Update Link Form"
+        "submit_link.html", form=update_link_form, title="Update Link Form"
     )
 
 
