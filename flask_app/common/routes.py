@@ -10,7 +10,6 @@ from flask_app.common.forms import (
     UpdateNameForm,
     UpdateStringContentForm,
 )
-from flask_app.constants import bullet_type
 from flask_app.models import Experience, HomepageDetails, Link, StringContent, load_user
 from flask_app.utils import current_time
 
@@ -20,7 +19,7 @@ common_blueprint = Blueprint(
 
 link_parent_collections = [HomepageDetails, Experience]
 string_content_parent_collections = [Experience]
-model_map = {"homepage_details": HomepageDetails, "experience": Experience}
+model_map = {"HomepageDetails": HomepageDetails, "Experience": Experience}
 
 
 @common_blueprint.route(
@@ -67,17 +66,14 @@ def create_link(parent_model, parent_document_creation_datetime=None):
     create_link_form = CreateLinkForm()
 
     if create_link_form.validate_on_submit():
-        parent_document = None
-        if parent_model == "HomepageDetails":
-            parent_document = HomepageDetails.objects(
+        parent_document = (
+            model_map[parent_model]
+            .objects(
                 owner=load_user(current_user.username),
                 creation_datetime=parent_document_creation_datetime,
-            ).first()
-        elif parent_model == "Experience":
-            parent_document = Experience.objects(
-                owner=load_user(current_user.username),
-                creation_datetime=parent_document_creation_datetime,
-            ).first()
+            )
+            .first()
+        )
 
         new_link = Link(
             parent=parent_document,
@@ -187,13 +183,14 @@ def create_string_content(
     create_string_content_form = CreateStringContentForm()
 
     if create_string_content_form.validate_on_submit():
-        parent_document = None
-
-        if parent_model == "Experience":
-            parent_document = Experience.objects(
+        parent_document = (
+            model_map[parent_model]
+            .objects(
                 owner=load_user(current_user.username),
                 creation_datetime=parent_document_creation_datetime,
-            ).first()
+            )
+            .first()
+        )
 
         new_string_content_document = StringContent(
             parent=parent_document,
