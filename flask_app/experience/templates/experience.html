@@ -15,9 +15,18 @@
                         'experience.view_experience',
                         experience_creation_datetime = experience.creation_datetime
                     )}}"
-                    class="btn btn-primary mr-3"
+                    class="btn btn-primary mr-3 pr-3 d-inline"
                 >
                     View Experience
+                </a>
+                <a
+                    href="{{url_for(
+                        'experience.delete_experience',
+                        experience_creation_datetime = experience.creation_datetime
+                    )}}"
+                    class="btn btn-danger mr-3 pr-3 d-inline"
+                >
+                    Delete Experience
                 </a>
             </div>
         </div>

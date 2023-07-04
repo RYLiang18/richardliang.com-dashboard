@@ -93,3 +93,26 @@ def view_experience(experience_creation_datetime):
         bullet_type=bullet_type,
         technology_type=technology_type,
     )
+
+
+@experience_blueprint.route(
+    "/delete_experience/<experience_creation_datetime>", methods=["GET", "POST"]
+)
+@login_required
+def delete_experience(experience_creation_datetime):
+    experience = Experience.objects(
+        owner=load_user(current_user.username),
+        creation_datetime=experience_creation_datetime,
+    ).first()
+
+    if experience is None:
+        # TODO: return 404
+        pass
+
+    # delete all documents with reference to experience
+    Link.objects(parent=experience).delete()
+    StringContent.objects(parent=experience).delete()
+
+    experience.delete()
+
+    return redirect(url_for("experience.index"))
