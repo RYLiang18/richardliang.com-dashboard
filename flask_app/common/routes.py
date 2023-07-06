@@ -67,8 +67,7 @@ def update_date(model, document_creation_datetime, property_name):
     )
 
     if document is None:
-        # TODO: return 404
-        pass
+        return render_template("404.html", title="🪦")
 
     update_date_form = UpdateDateForm(content=getattr(document, property_name))
     if update_date_form.validate_on_submit():
@@ -98,8 +97,7 @@ def update_image_link_property(model, document_creation_datetime):
     )
 
     if document is None:
-        # TODO: return 404
-        pass
+        return render_template("404.html", title="🪦")
 
     update_image_link_form = UpdateImageLinkForm(content=document.image_link)
 
@@ -130,8 +128,7 @@ def update_name_like_property(model, document_creation_datetime, property_name):
     )
 
     if document is None:
-        # TODO: return 404
-        pass
+        return render_template("404.html", title="🪦")
 
     update_name_like_property_form = SubmitSimpleStringContentForm(
         content=getattr(document, property_name)
@@ -199,8 +196,7 @@ def update_link(parent_document_creation_datetime, link_creation_datetime):
     )
 
     if link is None:
-        # TODO: return 404
-        pass
+        return render_template("404.html", title="🪦")
 
     update_link_form = SubmitLinkForm(link_name=link.link_name, url=link.url)
 
@@ -229,8 +225,7 @@ def delete_link(parent_document_creation_datetime, link_creation_datetime):
     )
 
     if link is None:
-        # TODO: return 404
-        pass
+        return render_template("404.html", title="🪦")
 
     link.delete()
 
@@ -291,8 +286,7 @@ def update_child_string_content(
     )
 
     if child_string_content_document is None:
-        # TODO: return 404
-        pass
+        return render_template("404.html", title="🪦")
 
     update_string_content_form = SubmitSimpleStringContentForm(
         content=child_string_content_document.content
@@ -329,8 +323,7 @@ def delete_string_content(
     )
 
     if child_string_content_document is None:
-        # TODO: return 404
-        pass
+        return render_template("404.html", title="🪦")
 
     child_string_content_document.delete()
 

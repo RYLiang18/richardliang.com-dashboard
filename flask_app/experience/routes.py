@@ -67,8 +67,7 @@ def view_experience(experience_creation_datetime):
     ).first()
 
     if experience is None:
-        # TODO: return 404
-        pass
+        return render_template("404.html", title="🪦")
 
     string_contents = {
         technology_type: StringContent.objects(
@@ -106,8 +105,7 @@ def delete_experience(experience_creation_datetime):
     ).first()
 
     if experience is None:
-        # TODO: return 404
-        pass
+        return render_template("404.html", title="🪦")
 
     # delete all documents with reference to experience
     Link.objects(parent=experience).delete()
