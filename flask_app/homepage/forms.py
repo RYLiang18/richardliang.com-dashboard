@@ -16,22 +16,6 @@ class EmailUpdateForm(FlaskForm):
     submit = SubmitField("Update")
 
 
-class PFPLinkUpdateForm(FlaskForm):
-    content = URLField(
-        "Image URL (ending in .jpg, .png, etc...)", validators=[InputRequired()]
-    )
-    submit = SubmitField("Update")
-
-    def validate_url(form, field):
-        jpg_regex = r"\.jpg$"
-        png_regex = r"\.png$"
-
-        if (not re.search(jpg_regex, field.data)) and (
-            not re.search(png_regex, field.data)
-        ):
-            raise ValidationError("URL must end in .jpg or .png")
-
-
 class DescriptionUpdateForm(FlaskForm):
     description = TextAreaField("Description", validators=[InputRequired()])
     update = SubmitField("Update")

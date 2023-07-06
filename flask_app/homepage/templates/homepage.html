@@ -44,7 +44,7 @@
             <div class="col"></div>
             <div class="col">
                 <img
-                    src="{{homepage_details.pfp_link}}"
+                    src="{{homepage_details.image_link}}"
                     alt="imgur profile picture"
                     class="card-img-top rounded-circle py-3"
                 >
@@ -53,10 +53,18 @@
         </div>
         <div class="card-body">
             <h5 class="card-title">
-                {{homepage_details.pfp_link}}
+                {{homepage_details.image_link}}
             </h5>
             <!-- TODO -->
-            <a href="{{url_for('homepage.update_pfp_link')}}" class="btn btn-primary">
+            <a
+                href="{{
+                    url_for(
+                        'common.update_image_link_property',
+                        model = 'HomepageDetails',
+                        document_creation_datetime = homepage_details.creation_datetime
+                    )}}"
+                class="btn btn-primary"
+            >
                 Edit Profile Picture Link
             </a>
         </div>

@@ -7,7 +7,6 @@ from flask_app.homepage.forms import (
     AboutMeUpdateForm,
     DescriptionUpdateForm,
     EmailUpdateForm,
-    PFPLinkUpdateForm,
 )
 from flask_app.models import HomepageDetails, Link, load_user  # Link
 from flask_app.utils import current_time
@@ -55,24 +54,6 @@ def update_email():
         "submit_simple_content.html",
         form=email_update_form,
         title="Homepage - Update Email",
-    )
-
-
-@homepage_blueprint.route("/update_pfp_link", methods=["GET", "POST"])
-@login_required
-def update_pfp_link():
-    pfp_link_update_form = PFPLinkUpdateForm()
-
-    if pfp_link_update_form.validate_on_submit():
-        homepage_details = HomepageDetails.objects(owner=current_user).first()
-        homepage_details.update(pfp_link=pfp_link_update_form.content.data)
-
-        return redirect(url_for("homepage.index"))
-
-    return render_template(
-        "submit_simple_content.html",
-        form=pfp_link_update_form,
-        title="Homepage - Update Profile Picture Link",
     )
 
 

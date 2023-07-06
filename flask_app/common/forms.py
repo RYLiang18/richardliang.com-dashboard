@@ -33,3 +33,22 @@ class UpdateDateForm(FlaskForm):
             raise ValidationError(
                 'Date must be in the format "MM/DD/YYYY" or "present"'
             )
+
+
+class UpdateImageLinkForm(FlaskForm):
+    content = URLField(
+        "Image URL (ending in .jpg, .png, etc...)", validators=[InputRequired()]
+    )
+    submit = SubmitField("Update")
+
+    def validate_content(form, field):
+        image_extensions = {".jpg": r"\.jpg$", ".png": r"\.png$", ".jpeg": r"\.jpeg$"}
+
+        valid = False
+        for _, image_extension_regex in image_extensions.items():
+            valid = valid or re.search(image_extension_regex, field.data)
+
+        if not valid:
+            raise ValidationError(
+                f"supported URL prefixes: {', '.join(list(image_extensions.keys()))}"
+            )

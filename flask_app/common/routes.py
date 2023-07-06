@@ -7,6 +7,7 @@ from flask_app.common.forms import (
     SubmitLinkForm,
     SubmitSimpleStringContentForm,
     UpdateDateForm,
+    UpdateImageLinkForm,
 )
 from flask_app.models import Experience, HomepageDetails, Link, StringContent, load_user
 from flask_app.utils import current_time, translate
@@ -20,6 +21,36 @@ string_content_parent_collections = [Experience]
 model_map = {"HomepageDetails": HomepageDetails, "Experience": Experience}
 
 
+# -- utility functions
+# child document refers to either Link or StringContent
+def get_child_document(
+    parent_document_creation_datetime,
+    child_document_creation_datetime,
+    parent_collections,
+    target_collection,
+    string_content_type="",
+):
+    parent_document = None
+    for parent_collection in parent_collections:
+        parent_document = parent_collection.objects(
+            owner=load_user(current_user.username),
+            creation_datetime=parent_document_creation_datetime,
+        ).first()
+        if parent_document is not None:
+            break
+    if target_collection == Link:
+        return target_collection.objects(
+            parent=parent_document, creation_datetime=child_document_creation_datetime
+        ).first()
+    elif target_collection == StringContent:
+        return target_collection.objects(
+            parent=parent_document,
+            creation_datetime=child_document_creation_datetime,
+            content_type=string_content_type,
+        ).first()
+
+
+# -- routes --
 @common_blueprint.route(
     "/update_date/<model>/<document_creation_datetime>/<property_name>",
     methods=["GET", "POST"],
@@ -48,6 +79,38 @@ def update_date(model, document_creation_datetime, property_name):
         "submit_simple_content.html",
         form=update_date_form,
         title=f"Update {translate(document.__class__.__name__)} - {translate(property_name)}",
+    )
+
+
+@common_blueprint.route(
+    "/update_image_link_property>/<model>/<document_creation_datetime>",
+    methods=["GET", "POST"],
+)
+@login_required
+def update_image_link_property(model, document_creation_datetime):
+    document = (
+        model_map[model]
+        .objects(
+            owner=load_user(current_user.username),
+            creation_datetime=document_creation_datetime,
+        )
+        .first()
+    )
+
+    if document is None:
+        # TODO: return 404
+        pass
+
+    update_image_link_form = UpdateImageLinkForm(content=document.image_link)
+
+    if update_image_link_form.validate_on_submit():
+        document.update(image_link=update_image_link_form.content.data)
+        return redirect(session["url"])
+
+    return render_template(
+        "submit_simple_content.html",
+        form=update_image_link_form,
+        title=f"Update {translate(document.__class__.__name__)} - Profile Picture",
     )
 
 
@@ -119,33 +182,6 @@ def create_link(parent_model, parent_document_creation_datetime=None):
         form=create_link_form,
         title=f"Create Link Form - {translate(parent_model)}",
     )
-
-
-def get_child_document(
-    parent_document_creation_datetime,
-    child_document_creation_datetime,
-    parent_collections,
-    target_collection,
-    string_content_type="",
-):
-    parent_document = None
-    for parent_collection in parent_collections:
-        parent_document = parent_collection.objects(
-            owner=load_user(current_user.username),
-            creation_datetime=parent_document_creation_datetime,
-        ).first()
-        if parent_document is not None:
-            break
-    if target_collection == Link:
-        return target_collection.objects(
-            parent=parent_document, creation_datetime=child_document_creation_datetime
-        ).first()
-    elif target_collection == StringContent:
-        return target_collection.objects(
-            parent=parent_document,
-            creation_datetime=child_document_creation_datetime,
-            content_type=string_content_type,
-        ).first()
 
 
 @common_blueprint.route(

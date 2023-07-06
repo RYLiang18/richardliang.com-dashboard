@@ -36,7 +36,7 @@ class HomepageDetails(db.Document):
     creation_datetime = db.StringField(required=True)
     full_name = db.StringField(required=True)
     email = db.EmailField(required=True)
-    pfp_link = db.URLField(required=True)
+    image_link = db.URLField(required=True)
     description = db.StringField(required=True)
     about_me = db.StringField(required=True)
 
