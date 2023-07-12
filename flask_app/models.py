@@ -50,6 +50,7 @@ class Experience(db.Document):
     position = db.StringField(required=True)
     start_date = db.StringField(required=True)
     end_date = db.StringField(required=True)
+    image_link = db.URLField(required=True)
     about = db.StringField(required=True)
     creation_datetime = db.StringField(required=True)  # primary key
 
