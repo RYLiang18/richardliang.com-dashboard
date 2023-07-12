@@ -1,7 +1,7 @@
 {% extends "header.html" %}
 {% block content %}
     <div class="mb-3">
-        <b>Note: </b> You will be able to add your tech stack, links, and bullets 
+        <b>Note: </b> You will be able to add your tech stack, links, and bullets
         by editing this experience after creating it.
     </div>
     <form action="" method="post">
@@ -66,12 +66,12 @@
 
         <!-- about -->
         <div class="mb-3">
-            {{form.about.label(class="form-label")}}
-            {{form.about(class="form-control mb-1", id="rl-dashboard-textbox")}}
+            {{form.long_description.label(class="form-label")}}
+            {{form.long_description(class="form-control mb-1", id="rl-dashboard-textbox")}}
 
-            {% if form.about.errors %}
+            {% if form.long_description.errors %}
                 <div class="alert alert-warning" role="alert">
-                    {% for error in form.about.errors %}
+                    {% for error in form.long_description.errors %}
                         <span>{{ error }}</span>
                     {% endfor %}
                 </div>

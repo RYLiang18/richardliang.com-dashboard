@@ -21,6 +21,6 @@ class DescriptionUpdateForm(FlaskForm):
     update = SubmitField("Update")
 
 
-class AboutMeUpdateForm(FlaskForm):
-    about_me = TextAreaField("About Me", validators=[InputRequired()])
-    update = SubmitField("Update")
+# class AboutMeUpdateForm(FlaskForm):
+#     about_me = TextAreaField("About Me", validators=[InputRequired()])
+#     update = SubmitField("Update")

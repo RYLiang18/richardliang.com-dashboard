@@ -233,16 +233,23 @@
         </div>
     </div>
 
-    <!-- about -->
+    <!-- long_description -->
     <div class="card mb-3">
         <h3 class="card-header">About</h3>
         <div class="card-body">
-            {% for para in experience.parse_about() %}
+            {% for paragraph in experience.parse_long_description() %}
                 <p class="card-text">
-                    {{para}}
+                    {{paragraph}}
                 </p>
             {% endfor %}
-            <a href="#" class="btn btn-primary">
+            <a
+                href="{{url_for(
+                    'common.update_long_description',
+                    model = 'Experience',
+                    document_creation_datetime = experience.creation_datetime
+                )}}"
+                class="btn btn-primary"
+            >
                 Edit
             </a>
         </div>

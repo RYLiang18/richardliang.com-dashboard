@@ -3,11 +3,7 @@ from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 from flask_login import current_user, login_required
 
-from flask_app.homepage.forms import (
-    AboutMeUpdateForm,
-    DescriptionUpdateForm,
-    EmailUpdateForm,
-)
+from flask_app.homepage.forms import DescriptionUpdateForm, EmailUpdateForm
 from flask_app.models import HomepageDetails, Link, load_user  # Link
 from flask_app.utils import current_time
 
@@ -78,20 +74,20 @@ def update_description():
     )
 
 
-@homepage_blueprint.route("/update_about_me", methods=["GET", "POST"])
-@login_required
-def update_about_me():
-    homepage_details = HomepageDetails.objects(owner=current_user).first()
+# @homepage_blueprint.route("/update_about_me", methods=["GET", "POST"])
+# @login_required
+# def update_about_me():
+#     homepage_details = HomepageDetails.objects(owner=current_user).first()
 
-    about_me_update_form = AboutMeUpdateForm(about_me=homepage_details.about_me)
+#     about_me_update_form = AboutMeUpdateForm(about_me=homepage_details.about_me)
 
-    if about_me_update_form.validate_on_submit():
-        homepage_details.update(about_me=about_me_update_form.about_me.data)
+#     if about_me_update_form.validate_on_submit():
+#         homepage_details.update(about_me=about_me_update_form.about_me.data)
 
-        return redirect(url_for("homepage.index"))
+#         return redirect(url_for("homepage.index"))
 
-    return render_template(
-        "update_about_me.html",
-        form=about_me_update_form,
-        title="Homepage - Update About Me",
-    )
+#     return render_template(
+#         "update_about_me.html",
+#         form=about_me_update_form,
+#         title="Homepage - Update About Me",
+# )

@@ -52,3 +52,8 @@ class UpdateImageLinkForm(FlaskForm):
             raise ValidationError(
                 f"supported URL prefixes: {', '.join(list(image_extensions.keys()))}"
             )
+
+
+class UpdateLongDescriptionForm(FlaskForm):
+    content = TextAreaField("Long Description", validators=[InputRequired()])
+    submit = SubmitField("Update")

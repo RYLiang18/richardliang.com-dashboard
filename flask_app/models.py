@@ -38,10 +38,10 @@ class HomepageDetails(db.Document):
     email = db.EmailField(required=True)
     image_link = db.URLField(required=True)
     description = db.StringField(required=True)
-    about_me = db.StringField(required=True)
+    long_description = db.StringField(required=True)
 
-    def parse_about_me(self):
-        return self.about_me.split("\n")
+    def parse_long_description(self):
+        return self.long_description.split("\n")
 
 
 class Experience(db.Document):
@@ -51,8 +51,8 @@ class Experience(db.Document):
     start_date = db.StringField(required=True)
     end_date = db.StringField(required=True)
     image_link = db.URLField(required=True)
-    about = db.StringField(required=True)
+    long_description = db.StringField(required=True)
     creation_datetime = db.StringField(required=True)  # primary key
 
-    def parse_about(self):
-        return self.about.split("\n")
+    def parse_long_description(self):
+        return self.long_description.split("\n")

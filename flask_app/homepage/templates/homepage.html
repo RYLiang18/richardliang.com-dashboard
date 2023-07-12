@@ -7,7 +7,7 @@
             <h5 class="card-title mb-2">
                 {{homepage_details.full_name}}
             </h5>
-            <!--  -->
+
             <a
                 href="{{url_for(
                     'common.update_name_like_property',
@@ -28,7 +28,7 @@
             <h5 class="card-title mb-2">
                 {{homepage_details.email}}
             </h5>
-            <!--  -->
+
             <a
                 href="{{url_for('homepage.update_email')}}"
                 class="btn btn-primary">
@@ -55,7 +55,7 @@
             <h5 class="card-title">
                 {{homepage_details.image_link}}
             </h5>
-            <!--  -->
+
             <a
                 href="{{
                     url_for(
@@ -105,7 +105,7 @@
                                         Edit
                                     </a>
 
-                                    <!--  -->
+
                                     <a
                                         href="{{url_for(
                                             'common.delete_link',
@@ -122,7 +122,7 @@
                     </li>
                 {% endfor %}
             </ul>
-            <!--  -->
+
             <a
                 href="{{url_for(
                     'common.create_link',
@@ -140,13 +140,20 @@
     <div class="card mb-3">
         <h3 class="card-header">About Me</h3>
         <div class="card-body">
-            {% for para in homepage_details.parse_about_me() %}
+            {% for paragraph in homepage_details.parse_long_description() %}
                 <p class="card-text">
-                    {{para}}
+                    {{paragraph}}
                 </p>
             {% endfor %}
-            <!--  -->
-            <a href="{{url_for('homepage.update_about_me')}}" class="btn btn-primary">
+
+            <a
+                href="{{url_for(
+                    'common.update_long_description',
+                    model = 'HomepageDetails',
+                    document_creation_datetime = homepage_details.creation_datetime
+                )}}"
+                class="btn btn-primary"
+            >
                 Edit About Me
             </a>
         </div>

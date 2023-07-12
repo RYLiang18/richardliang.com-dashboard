@@ -26,4 +26,5 @@ def translate(property):
         "full_name": "Full Name",
         "bullet": "Bullet",
         "technology": "Technology",
+        "long_description": "Long Description",
     }[property]

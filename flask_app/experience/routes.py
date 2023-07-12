@@ -37,7 +37,7 @@ def create_experience():
             position=create_experience_form.position.data,
             start_date=create_experience_form.start_date.data,
             end_date=create_experience_form.end_date.data,
-            about=create_experience_form.about.data,
+            long_description=create_experience_form.long_description.data,
             image_link="https://i.imgur.com/nMIu8OU.jpg",
             creation_datetime=current_time(),
         )

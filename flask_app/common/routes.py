@@ -8,6 +8,7 @@ from flask_app.common.forms import (
     SubmitSimpleStringContentForm,
     UpdateDateForm,
     UpdateImageLinkForm,
+    UpdateLongDescriptionForm,
 )
 from flask_app.models import Experience, HomepageDetails, Link, StringContent, load_user
 from flask_app.utils import current_time, translate
@@ -328,3 +329,37 @@ def delete_string_content(
     child_string_content_document.delete()
 
     return redirect(session["url"])
+
+
+@common_blueprint.route(
+    "/update_long_description/<model>/<document_creation_datetime>",
+    methods=["GET", "POST"],
+)
+@login_required
+def update_long_description(model, document_creation_datetime):
+    document = (
+        model_map[model]
+        .objects(
+            owner=load_user(current_user.username),
+            creation_datetime=document_creation_datetime,
+        )
+        .first()
+    )
+
+    if document is None:
+        return render_template("404.html", title="🪦")
+
+    update_long_description_form = UpdateLongDescriptionForm(
+        content=document.long_description
+    )
+
+    if update_long_description_form.validate_on_submit():
+        document.update(long_description=update_long_description_form.content.data)
+
+        return redirect(session["url"])
+
+    return render_template(
+        "submit_long_description.html",
+        form=update_long_description_form,
+        title=f"Update {translate(document.__class__.__name__)} - Long Description",
+    )
