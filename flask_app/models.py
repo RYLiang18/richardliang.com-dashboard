@@ -56,3 +56,16 @@ class Experience(db.Document):
 
     def parse_long_description(self):
         return self.long_description.split("\n")
+
+
+class Project(db.Document):
+    owner = db.ReferenceField(User, required=True)  # primary key
+    project_name = db.StringField(required=True)
+    start_date = db.StringField(required=True)
+    end_date = db.StringField(required=True)
+    image_link = db.URLField(required=True)
+    long_description = db.StringField(required=True)
+    creation_datetime = db.StringField(required=True)  # primary key
+
+    def parse_long_description(self):
+        return self.long_description.split("\n")
