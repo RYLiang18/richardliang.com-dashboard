@@ -22,7 +22,10 @@
                 </a>
                 <!-- todo -->
                 <a
-                    href=""
+                    href="{{url_for(
+                        'projects.delete_project',
+                        project_creation_datetime = project.creation_datetime
+                    )}}"
                     class="btn btn-danger mx-3 d-inline"
                 >
                     Delete project

@@ -86,3 +86,24 @@ def view_project(project_creation_datetime):
         string_content_types=[technology_type, bullet_type],
         links=projectLinks,
     )
+
+
+@projects_blueprint.route(
+    "/delete_project/<project_creation_datetime>", methods=["GET", "POST"]
+)
+@login_required
+def delete_project(project_creation_datetime):
+    project = Project.objects(
+        owner=load_user(current_user.username),
+        creation_datetime=project_creation_datetime,
+    ).first()
+
+    if project is None:
+        return render_template("404.html", title="🪦")
+
+    Link.objects(parent=project).delete()
+    StringContent.objects(parent=project).delete()
+
+    project.delete()
+
+    return redirect(url_for("projects.index"))
