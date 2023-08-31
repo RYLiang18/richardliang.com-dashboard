@@ -12,7 +12,10 @@
                 <br>
                 <!-- todo -->
                 <a
-                    href=""
+                    href="{{url_for(
+                        'projects.view_project',
+                        project_creation_datetime = project.creation_datetime
+                    )}}"
                     class="btn btn-primary d-inline"
                 >
                     View project

@@ -90,8 +90,6 @@ def view_experience(experience_creation_datetime):
         string_content_headers=string_content_headers,
         string_content_types=[technology_type, bullet_type],
         links=experienceLinks,
-        bullet_type=bullet_type,
-        technology_type=technology_type,
     )
 
 

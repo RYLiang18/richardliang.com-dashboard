@@ -20,10 +20,13 @@ def translate(property):
     return {
         "HomepageDetails": "Homepage Details",
         "Experience": "Experience",
+        "Project": "Project",
         "company_name": "Company Name",
         "start_date": "Start Date",
         "end_date": "End Date",
         "full_name": "Full Name",
+        "project_name": "Project Name",
+        "position": "Position",
         "bullet": "Bullet",
         "technology": "Technology",
         "long_description": "Long Description",

@@ -1,0 +1,205 @@
+{% extends "header.html" %}
+{% block content %}
+
+    <!-- Project Name -->
+    <div class="card mb-3">
+        <h3 class="card-header">Project Name</h3>
+        <div class="card-body">
+            <h5 class="card-title mb-2">
+                {{project.project_name}}
+            </h5>
+            <a
+                href= "{{url_for(
+                    'common.update_name_like_property',
+                    model = 'Project',
+                    document_creation_datetime = project.creation_datetime,
+                    property_name = 'project_name'
+                )}}"
+                class="btn btn-primary">
+                Edit
+            </a>
+        </div>
+    </div>
+
+    <!-- Start and End date -->
+    <div class="row mb-3">
+        <div class="col mr-1">
+            <!-- start date -->
+            <div class="card">
+                <h3 class="card-header">Start Date</h3>
+                <div class="card-body">
+                    <h5 class="card-title mb-2">
+                        {{project.start_date}}
+                    </h5>
+                    <a
+                        href="{{url_for(
+                            'common.update_date',
+                            model = 'Project',
+                            document_creation_datetime = project.creation_datetime,
+                            property_name = 'start_date'
+                        )}}"
+                        class="btn btn-primary">
+                        Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- end date -->
+        <div class="col ml-1">
+            <!-- start date -->
+            <div class="card">
+                <h3 class="card-header">End Date</h3>
+                <div class="card-body">
+                    <h5 class="card-title mb-2">
+                        {{project.end_date}}
+                    </h5>
+                    <a
+                        href="{{url_for(
+                            'common.update_date',
+                            model = 'Project',
+                            document_creation_datetime = project.creation_datetime,
+                            property_name = 'end_date'
+                        )}}"
+                        class="btn btn-primary">
+                        Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- tech stack and bullets -->
+    {% for string_content_type in string_content_types %}
+        <div class="card mb-3">
+            <h3 class = "card-header">{{string_content_headers[string_content_type]}}</h3>
+            <div class="card-body">
+                <ul class="list-group mb-3">
+                    {% for string_content in string_contents[string_content_type] %}
+                    <li class="list-group-item">
+                        <div class="row g-3">
+                            <div class = "col">
+                                {{string_content.content}}
+                            </div>
+                            <div class = "col">
+                                <div class="float-end">
+                                    <a
+                                        href="{{url_for(
+                                            'common.update_child_string_content',
+                                            parent_document_creation_datetime = string_content.parent.creation_datetime,
+                                            string_content_creation_datetime = string_content.creation_datetime,
+                                            content_type = string_content_type
+                                        )}}"
+                                        class="btn btn-primary mr-3"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <a
+                                        href="{{url_for(
+                                            'common.delete_string_content',
+                                            parent_document_creation_datetime = string_content.parent.creation_datetime,
+                                            string_content_creation_datetime = string_content.creation_datetime,
+                                            content_type = string_content_type
+                                        )}}"
+                                        class="btn btn-danger"
+                                    >
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <a
+                    href="{{url_for(
+                        'common.create_child_string_content',
+                        parent_model = 'Project',
+                        parent_document_creation_datetime = project.creation_datetime,
+                        content_type = string_content_type
+                    )}}"
+                    class="btn btn-primary"
+                >
+                    Add {{string_content_type}}
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- Links -->
+    <div class="card mb-3">
+        <h3 class = "card-header">Links</h3>
+        <div class="card-body">
+            <ul class="list-group mb-3">
+                {% for link in links %}
+                    <li class="list-group-item">
+                        <div class="row g-3">
+                            <div class = "col">
+                                <b>{{link.link_name}} :</b> {{link.url}}
+                            </div>
+                            <div class = "col">
+                                <div class="float-end">
+                                    <a
+                                        href="{{url_for(
+                                            'common.update_link',
+                                            parent_document_creation_datetime = link.parent.creation_datetime,
+                                            link_creation_datetime = link.creation_datetime
+                                        )}}"
+                                        class="btn btn-primary mr-3"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <a
+                                        href="{{url_for(
+                                            'common.delete_link',
+                                            parent_document_creation_datetime = link.parent.creation_datetime,
+                                            link_creation_datetime = link.creation_datetime
+                                        )}}"
+                                        class="btn btn-danger"
+                                    >
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <a
+                href="{{url_for(
+                    'common.create_link',
+                    parent_model = 'Project',
+                    parent_document_creation_datetime = project.creation_datetime
+                )}}"
+                class="btn btn-primary"
+            >
+                Add Link
+            </a>
+        </div>
+    </div>
+
+    <!-- long_description -->
+    <div class="card mb-3">
+        <h3 class="card-header">About</h3>
+        <div class="card-body">
+            {% for paragraph in project.parse_long_description() %}
+                <p class="card-text">
+                    {{paragraph}}
+                </p>
+            {% endfor %}
+            <a
+                href="{{url_for(
+                    'common.update_long_description',
+                    model = 'Project',
+                    document_creation_datetime = project.creation_datetime
+                )}}"
+                class="btn btn-primary"
+            >
+                Edit
+            </a>
+        </div>
+    </div>
+{% endblock %}

@@ -10,16 +10,27 @@ from flask_app.common.forms import (
     UpdateImageLinkForm,
     UpdateLongDescriptionForm,
 )
-from flask_app.models import Experience, HomepageDetails, Link, StringContent, load_user
+from flask_app.models import (
+    Experience,
+    HomepageDetails,
+    Link,
+    Project,
+    StringContent,
+    load_user,
+)
 from flask_app.utils import current_time, translate
 
 common_blueprint = Blueprint(
     "common", __name__, url_prefix="/common", template_folder="./templates"
 )
 
-link_parent_collections = [HomepageDetails, Experience]
-string_content_parent_collections = [Experience]
-model_map = {"HomepageDetails": HomepageDetails, "Experience": Experience}
+link_parent_collections = [HomepageDetails, Experience, Project]
+string_content_parent_collections = [Experience, Project]
+model_map = {
+    "HomepageDetails": HomepageDetails,
+    "Experience": Experience,
+    "Project": Project,
+}
 
 
 # -- utility functions
