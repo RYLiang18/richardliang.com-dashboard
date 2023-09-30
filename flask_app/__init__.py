@@ -1,8 +1,9 @@
-from flask import Flask
-from flask_mongoengine import MongoEngine
-from flask_login import LoginManager
-from flask_bcrypt import Bcrypt
 import os
+
+from flask import Flask
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
+from flask_mongoengine import MongoEngine
 
 db = MongoEngine()
 login_manager = LoginManager()
@@ -61,15 +62,15 @@ def create_app():
     login_manager.init_app(app)
     bcrypt.init_app(app)
 
-    # need to import this as models.py is not implicitly imported
-    from flask_app.models import load_user
-
-    # // registering blueprints ////////////////////
-    from flask_app.users.routes import users_blueprint
-    from flask_app.homepage.routes import homepage_blueprint
-    from flask_app.experience.routes import experience_blueprint
-    from flask_app.projects.routes import projects_blueprint
+    from flask_app.api_routes import api_blueprint
     from flask_app.common.routes import common_blueprint
+    from flask_app.experience.routes import experience_blueprint
+    from flask_app.homepage.routes import homepage_blueprint
+    from flask_app.models import (
+        load_user,
+    )  # need to import this as models.py is not implicitly imported
+    from flask_app.projects.routes import projects_blueprint
+    from flask_app.users.routes import users_blueprint
 
     blueprints = [
         users_blueprint,
@@ -77,6 +78,7 @@ def create_app():
         experience_blueprint,
         projects_blueprint,
         common_blueprint,
+        api_blueprint,
     ]
     for blueprint in blueprints:
         app.register_blueprint(blueprint)
