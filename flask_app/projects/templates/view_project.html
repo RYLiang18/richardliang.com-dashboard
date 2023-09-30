@@ -69,6 +69,38 @@
         </div>
     </div>
 
+    <!-- project image link-->
+    <div class="card mb-3">
+        <h3 class="card-header">Project Picture Link</h3>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col">
+                <img
+                    src="{{project.image_link}}"
+                    alt="imgur project picture"
+                    class="card-img-top py-3"
+                >
+            </div>
+            <div class="col"></div>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                {{project.image_link}}
+            </h5>
+            <a
+                href="{{
+                    url_for(
+                        'common.update_image_link_property',
+                        model = 'Project',
+                        document_creation_datetime = project.creation_datetime
+                    )}}"
+                class="btn btn-primary"
+            >
+                Edit Project Image Link
+            </a>
+        </div>
+    </div>
+
     <!-- tech stack and bullets -->
     {% for string_content_type in string_content_types %}
         <div class="card mb-3">
