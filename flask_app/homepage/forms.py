@@ -17,10 +17,5 @@ class EmailUpdateForm(FlaskForm):
 
 
 class DescriptionUpdateForm(FlaskForm):
-    content = TextAreaField("Description", validators=[InputRequired()])
+    content = StringField("Description", validators=[InputRequired()])
     submit = SubmitField("Update")
-
-
-# class AboutMeUpdateForm(FlaskForm):
-#     about_me = TextAreaField("About Me", validators=[InputRequired()])
-#     update = SubmitField("Update")

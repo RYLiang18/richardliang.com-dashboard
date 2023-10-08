@@ -14,9 +14,3 @@ document.getElementById('rl-dashboard-textbox').addEventListener('keydown', func
             this.selectionEnd = start + 1;
     }
 })
-
-document.getElementById('rl-dashboard-homepage-description').addEventListener('keydown', function(e){
-  if (e.key == 'Enter') {
-      e.preventDefault();
-  }
-})

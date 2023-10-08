@@ -68,7 +68,7 @@ def update_description():
         return redirect(url_for("homepage.index"))
 
     return render_template(
-        "update_description.html",
+        "submit_simple_content.html",
         form=description_update_form,
         title="Homepage - Update Description",
     )

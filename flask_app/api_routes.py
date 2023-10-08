@@ -5,8 +5,8 @@ from flask_app.models import HomepageDetails, Link, load_user
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
 
-@api_blueprint.route("/view_homepage_details/<username>", methods=["GET"])
-def view_homepage_details(username):
+@api_blueprint.route("/homepage_details/<username>", methods=["GET"])
+def homepage_details(username):
     homepage_details = HomepageDetails.objects(owner=load_user(username)).first()
 
     if homepage_details is None:
