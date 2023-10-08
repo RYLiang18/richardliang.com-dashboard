@@ -59,11 +59,11 @@ def update_description():
     homepage_details = HomepageDetails.objects(owner=current_user).first()
 
     description_update_form = DescriptionUpdateForm(
-        description=homepage_details.description
+        content=homepage_details.description
     )
 
     if description_update_form.validate_on_submit():
-        homepage_details.update(description=description_update_form.description.data)
+        homepage_details.update(description=description_update_form.content.data)
 
         return redirect(url_for("homepage.index"))
 

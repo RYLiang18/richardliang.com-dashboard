@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 
-from flask_app.models import HomepageDetails, load_user
+from flask_app.models import HomepageDetails, Link, load_user
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
@@ -12,15 +12,24 @@ def view_homepage_details(username):
     if homepage_details is None:
         return jsonify(
             {
-                "error": f"homepage details document not found. The user [{username}] may not exist, or they may not have a homepage yet"
+                "error": f"homepage details document not found. The user [{username}] may not exist, or they may not have initiated a homepage yet"
             }
         )
 
+    homepage_details_links = Link.objects(parent=homepage_details)
+    homepage_details_links_resp = [
+        {"link_name": homepage_details_link.link_name, "url": homepage_details_link.url}
+        for homepage_details_link in homepage_details_links
+    ]
+
     resp = {
+        "owner_username": homepage_details.owner.username,
+        "creation_datetime": homepage_details.creation_datetime,
         "full_name": homepage_details.full_name,
         "email": homepage_details.email,
-        "image_link": homepage_details.image_link,
+        "profile_picture_link": homepage_details.image_link,
         "description": homepage_details.description,
+        "personal_links": homepage_details_links_resp,
         "long_description": homepage_details.long_description,
     }
 
