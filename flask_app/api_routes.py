@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
 
-from flask_app.models import HomepageDetails, Link, load_user
+from flask_app.constants import bullet_type, technology_type
+from flask_app.models import Experience, HomepageDetails, Link, StringContent, load_user
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
@@ -17,20 +18,81 @@ def homepage_details(username):
         )
 
     homepage_details_links = Link.objects(parent=homepage_details)
-    homepage_details_links_resp = [
-        {"link_name": homepage_details_link.link_name, "url": homepage_details_link.url}
-        for homepage_details_link in homepage_details_links
-    ]
 
-    resp = {
-        "owner_username": homepage_details.owner.username,
-        "creation_datetime": homepage_details.creation_datetime,
-        "full_name": homepage_details.full_name,
-        "email": homepage_details.email,
-        "profile_picture_link": homepage_details.image_link,
-        "description": homepage_details.description,
-        "personal_links": homepage_details_links_resp,
-        "long_description": homepage_details.long_description,
-    }
+    return jsonify(
+        {
+            "owner_username": homepage_details.owner.username,
+            "creation_datetime": homepage_details.creation_datetime,
+            "full_name": homepage_details.full_name,
+            "email": homepage_details.email,
+            "profile_picture_link": homepage_details.image_link,
+            "description": homepage_details.description,
+            "personal_links": [
+                {
+                    "link_name": link.link_name,
+                    "url": link.url,
+                }
+                for link in homepage_details_links
+            ],
+            "long_description": homepage_details.long_description,
+        }
+    )
 
-    return jsonify(resp)
+
+@api_blueprint.route("/experiences/<username>", methods=["GET"])
+def experiences(username):
+    experiences = Experience.objects(owner=load_user(username))
+    return jsonify(
+        {
+            "experiences": [
+                {
+                    "owner_username": experience.owner.username,
+                    "creation_datetime": experience.creation_datetime,
+                    "company_name": experience.company_name,
+                    "position": experience.position,
+                    "start_date": experience.start_date,
+                    "end_date": experience.end_date,
+                    "image_link": experience.image_link,
+                }
+                for experience in experiences
+            ]
+        }
+    )
+
+
+@api_blueprint.route("/one_experience/<username>/<creation_datetime>", methods=["GET"])
+def one_experience(username, creation_datetime):
+    experience = Experience.objects(
+        owner=load_user(username), creation_datetime=creation_datetime
+    ).first()
+
+    experience_links = Link.objects(parent=experience)
+    experience_technologies = StringContent.objects(
+        parent=experience, content_type=technology_type
+    )
+    experience_bullets = StringContent.objects(
+        parent=experience, content_type=bullet_type
+    )
+
+    return jsonify(
+        {
+            "experience": {
+                "owner_username": experience.owner.username,
+                "creation_datetime": experience.creation_datetime,
+                "company_name": experience.company_name,
+                "position": experience.position,
+                "start_date": experience.start_date,
+                "end_date": experience.end_date,
+                "image_link": experience.image_link,
+                "links": [
+                    {"link_name": link.link_name, "url": link.url}
+                    for link in experience_links
+                ],
+                "tech_stack": [
+                    technology.content for technology in experience_technologies
+                ],
+                "bullets": [bullet.content for bullet in experience_bullets],
+                "long_description": experience.long_description,
+            }
+        }
+    )
