@@ -1,7 +1,14 @@
 from flask import Blueprint, jsonify
 
 from flask_app.constants import bullet_type, technology_type
-from flask_app.models import Experience, HomepageDetails, Link, StringContent, load_user
+from flask_app.models import (
+    Experience,
+    HomepageDetails,
+    Link,
+    Project,
+    StringContent,
+    load_user,
+)
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
@@ -93,6 +100,61 @@ def one_experience(username, creation_datetime):
                 ],
                 "bullets": [bullet.content for bullet in experience_bullets],
                 "long_description": experience.long_description,
+            }
+        }
+    )
+
+
+@api_blueprint.route("/projects/<username>", methods=["GET"])
+def projects(username):
+    projects = Project.objects(owner=load_user(username))
+    return jsonify(
+        {
+            "projects": [
+                {
+                    "owner_username": project.owner.username,
+                    "creation_datetime": project.creation_datetime,
+                    "project_name": project.project_name,
+                    "start_date": project.start_date,
+                    "end_date": project.end_date,
+                    "image_link": project.image_link,
+                }
+                for project in projects
+            ]
+        }
+    )
+
+
+@api_blueprint.route("/one_project/<username>/<creation_datetime>", methods=["GET"])
+def one_project(username, creation_datetime):
+    project = Project.objects(
+        owner=load_user(username), creation_datetime=creation_datetime
+    ).first()
+
+    project_links = Link.objects(parent=project)
+    project_technologies = StringContent.objects(
+        parent=project, content_type=technology_type
+    )
+    project_bullets = StringContent.objects(parent=project, content_type=bullet_type)
+
+    return jsonify(
+        {
+            "project": {
+                "owner_username": project.owner.username,
+                "creation_datetime": project.creation_datetime,
+                "project_name": project.project_name,
+                "start_date": project.start_date,
+                "end_date": project.end_date,
+                "image_link": project.image_link,
+                "links": [
+                    {"link_name": link.link_name, "url": link.url}
+                    for link in project_links
+                ],
+                "tech_stack": [
+                    technology.content for technology in project_technologies
+                ],
+                "bullets": [bullet.content for bullet in project_bullets],
+                "long_description": project.long_description,
             }
         }
     )

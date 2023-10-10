@@ -72,11 +72,11 @@
 
     <!-- Description -->
     <div class="card mb-3">
-        <h3 class="card-header">Description</h3>
+        <h3 class="card-header">Short Description</h3>
         <div class="card-body">
-            <p class="card-text">{{homepage_details.description}}</p>
-            <a href="{{url_for('homepage.update_description')}}" class="btn btn-primary">
-                Edit Description
+            <p class="card-text">{{homepage_details.short_description}}</p>
+            <a href="{{url_for('homepage.update_short_description')}}" class="btn btn-primary">
+                Edit Short Description
             </a>
         </div>
     </div>
@@ -138,7 +138,7 @@
 
     <!-- about_me -->
     <div class="card mb-3">
-        <h3 class="card-header">About Me</h3>
+        <h3 class="card-header">Long Description (About Me)</h3>
         <div class="card-body">
             {% for paragraph in homepage_details.parse_long_description() %}
                 <p class="card-text">
@@ -154,7 +154,7 @@
                 )}}"
                 class="btn btn-primary"
             >
-                Edit About Me
+                Edit Long Description
             </a>
         </div>
     </div>

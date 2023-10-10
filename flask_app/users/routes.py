@@ -17,7 +17,7 @@ def new_default_homepage():
         full_name="Replace with your full name",
         email="your_email@example.com",
         image_link="https://i.imgur.com/5r7v03y.png",
-        description="replace me with a short description of yourself",
+        short_description="replace me with a short description of yourself",
         long_description=ipsum(),
         creation_datetime=current_time(),
     )

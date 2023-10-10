@@ -58,6 +58,8 @@ def create_app():
     app.config["SECRET_KEY"] = os.getenv("secret_key")
     app.config["MONGODB_HOST"] = os.getenv("mongodb_uri")
 
+    print("MONGODB HOST")
+    print(app.config["MONGODB_HOST"])
     db.init_app(app)
     login_manager.init_app(app)
     bcrypt.init_app(app)

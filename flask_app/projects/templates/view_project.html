@@ -52,7 +52,7 @@
                 <h3 class="card-header">End Date</h3>
                 <div class="card-body">
                     <h5 class="card-title mb-2">
-                        {{project.end_date}}
+                        {{project.end_date if project.end_date != "" else "N/A"}}
                     </h5>
                     <a
                         href="{{url_for(

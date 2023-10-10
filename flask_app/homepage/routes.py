@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 from flask_login import current_user, login_required
 
-from flask_app.homepage.forms import DescriptionUpdateForm, EmailUpdateForm
+from flask_app.homepage.forms import EmailUpdateForm, ShortDescriptionUpdateForm
 from flask_app.models import HomepageDetails, Link, load_user  # Link
 from flask_app.utils import current_time
 
@@ -55,20 +55,22 @@ def update_email():
 
 @homepage_blueprint.route("/update_description", methods=["GET", "POST"])
 @login_required
-def update_description():
+def update_short_description():
     homepage_details = HomepageDetails.objects(owner=current_user).first()
 
-    description_update_form = DescriptionUpdateForm(
-        content=homepage_details.description
+    short_description_update_form = ShortDescriptionUpdateForm(
+        content=homepage_details.short_description
     )
 
-    if description_update_form.validate_on_submit():
-        homepage_details.update(description=description_update_form.content.data)
+    if short_description_update_form.validate_on_submit():
+        homepage_details.update(
+            short_description=short_description_update_form.content.data
+        )
 
         return redirect(url_for("homepage.index"))
 
     return render_template(
         "submit_simple_content.html",
-        form=description_update_form,
-        title="Homepage - Update Description",
+        form=short_description_update_form,
+        title="Homepage - Update Short Description",
     )

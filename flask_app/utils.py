@@ -17,7 +17,7 @@ def is_url(url):
 
 
 def translate(property):
-    return {
+    dictionary = {
         "HomepageDetails": "Homepage Details",
         "Experience": "Experience",
         "Project": "Project",
@@ -30,4 +30,9 @@ def translate(property):
         "bullet": "Bullet",
         "technology": "Technology",
         "long_description": "Long Description",
-    }[property]
+    }
+
+    if property in dictionary:
+        return dictionary[property]
+    else:
+        return property

@@ -11,7 +11,7 @@ from flask_app.utils import is_date
 class CreateProjectForm(FlaskForm):
     project_name = StringField("Project Name", validators=[InputRequired()])
     start_date = StringField("Start Date", validators=[InputRequired()])
-    end_date = StringField("End Date", validators=[InputRequired()])
+    end_date = StringField("End Date")
     long_description = TextAreaField("Long Description", validators=[InputRequired()])
     submit = SubmitField("Submit")
 
@@ -22,7 +22,7 @@ class CreateProjectForm(FlaskForm):
             )
 
     def validate_end_date(form, field):
-        if not is_date(field.data):
+        if field.data != "" and (not is_date(field.data)):
             raise ValidationError(
                 'Date must be in the format "MM/DD/YYYY" or "present"'
             )

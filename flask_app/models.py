@@ -37,7 +37,7 @@ class HomepageDetails(db.Document):
     full_name = db.StringField(required=True)
     email = db.EmailField(required=True)
     image_link = db.URLField(required=True)
-    description = db.StringField(required=True)
+    short_description = db.StringField(required=True)
     long_description = db.StringField(required=True)
 
     def parse_long_description(self):
@@ -62,7 +62,7 @@ class Project(db.Document):
     owner = db.ReferenceField(User, required=True)  # primary key
     project_name = db.StringField(required=True)
     start_date = db.StringField(required=True)
-    end_date = db.StringField(required=True)
+    end_date = db.StringField()
     image_link = db.URLField(required=True)
     long_description = db.StringField(required=True)
     creation_datetime = db.StringField(required=True)  # primary key
