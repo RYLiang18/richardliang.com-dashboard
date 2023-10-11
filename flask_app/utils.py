@@ -7,6 +7,12 @@ def current_time() -> str:
     return datetime.now().strftime("%B%d%Y%H%M%S")
 
 
+def ipsum():
+    path = "/home/appuser/flask_app/ipsum.txt"
+    with open(path, "r") as f:
+        return f.read()
+
+
 def is_date(data):
     regex = "(^[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}$)|(^present$)"
     return bool(re.match(regex, data))

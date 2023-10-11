@@ -1,10 +1,10 @@
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
-from flask_app import bcrypt, ipsum
+from flask_app import bcrypt
 from flask_app.models import HomepageDetails, User, load_user
 from flask_app.users.forms import LoginForm, RegistrationForm
-from flask_app.utils import b64_encode, current_time
+from flask_app.utils import b64_encode, current_time, ipsum
 
 users_blueprint = Blueprint("users", __name__, template_folder="./templates")
 

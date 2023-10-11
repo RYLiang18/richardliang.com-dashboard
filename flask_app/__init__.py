@@ -10,12 +10,6 @@ login_manager = LoginManager()
 bcrypt = Bcrypt()
 
 
-def ipsum():
-    path = "/home/appuser/flask_app/ipsum.txt"
-    with open(path, "r") as f:
-        return f.read()
-
-
 def nuke_collections():
     print("Nuking database...")
     for collection_name in db.get_db().list_collection_names():
@@ -84,9 +78,8 @@ def create_app():
     ]
     for blueprint in blueprints:
         app.register_blueprint(blueprint)
-    # //////////////////////////////////////////////
 
-    app.before_first_request(nuke_and_seed_users)
+    # app.before_first_request(nuke_and_seed_users)
 
     login_manager.login_view = "users.login"
 
