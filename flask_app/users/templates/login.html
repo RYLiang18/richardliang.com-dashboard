@@ -30,7 +30,17 @@
                 </div>
             {% endif %}
         </div>
-        
+
         {{ form.submit(class="btn btn-primary") }}
     </form>
+
+    {% if title=="login" %}
+        <div class="mt-4">
+          If you're new, register <a href="{{ url_for('users.register') }}">here</a>
+        </div>
+    {% else %}
+        <div class="mt-4">
+          If you already have an account, login <a href="{{ url_for('users.login') }}">here</a>
+        </div>
+    {% endif %}
 {% endblock %}

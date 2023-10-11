@@ -1,11 +1,9 @@
-from datetime import datetime
-
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from flask_app import bcrypt, ipsum
 from flask_app.models import HomepageDetails, User, load_user
-from flask_app.users.forms import LoginForm
+from flask_app.users.forms import LoginForm, RegistrationForm
 from flask_app.utils import b64_encode, current_time
 
 users_blueprint = Blueprint("users", __name__, template_folder="./templates")
@@ -63,3 +61,22 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("users.login"))
+
+
+@users_blueprint.route("/register", methods=["GET", "POST"])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("homepage.index"))
+
+    registrationForm = RegistrationForm()
+    if registrationForm.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(
+            registrationForm.password.data
+        ).decode("utf-8")
+        new_user = User(
+            username=registrationForm.username.data, password=hashed_password
+        )
+        new_user.save()
+        return redirect(url_for("users.login"))
+
+    return render_template("login.html", form=registrationForm, title="register")
