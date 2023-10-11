@@ -6,7 +6,7 @@ from flask_login import current_user, login_required
 from flask_app.constants import bullet_type, technology_type
 from flask_app.experience.forms import CreateExperienceForm
 from flask_app.models import Experience, Link, StringContent, load_user
-from flask_app.utils import current_time
+from flask_app.utils import b64_encode, current_time
 
 experience_blueprint = Blueprint(
     "experience", __name__, url_prefix="/experience", template_folder="./templates"
@@ -37,7 +37,9 @@ def create_experience():
             position=create_experience_form.position.data,
             start_date=create_experience_form.start_date.data,
             end_date=create_experience_form.end_date.data,
-            long_description=create_experience_form.long_description.data,
+            long_description_b64=b64_encode(
+                create_experience_form.long_description.data
+            ),
             image_link="https://i.imgur.com/nMIu8OU.jpg",
             creation_datetime=current_time(),
         )

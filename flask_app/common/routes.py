@@ -18,7 +18,7 @@ from flask_app.models import (
     StringContent,
     load_user,
 )
-from flask_app.utils import current_time, translate
+from flask_app.utils import b64_decode, b64_encode, current_time, translate
 
 common_blueprint = Blueprint(
     "common", __name__, url_prefix="/common", template_folder="./templates"
@@ -361,11 +361,13 @@ def update_long_description(model, document_creation_datetime):
         return render_template("404.html", title="🪦")
 
     update_long_description_form = UpdateLongDescriptionForm(
-        content=document.long_description
+        content=b64_decode(document.long_description_b64)
     )
 
     if update_long_description_form.validate_on_submit():
-        document.update(long_description=update_long_description_form.content.data)
+        document.update(
+            long_description_b64=b64_encode(update_long_description_form.content.data)
+        )
 
         return redirect(session["url"])
 

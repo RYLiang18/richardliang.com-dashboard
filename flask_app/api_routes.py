@@ -33,7 +33,7 @@ def homepage_details(username):
             "full_name": homepage_details.full_name,
             "email": homepage_details.email,
             "profile_picture_link": homepage_details.image_link,
-            "description": homepage_details.description,
+            "description": homepage_details.short_description,
             "personal_links": [
                 {
                     "link_name": link.link_name,
@@ -41,7 +41,7 @@ def homepage_details(username):
                 }
                 for link in homepage_details_links
             ],
-            "long_description": homepage_details.long_description,
+            "long_description_b64": homepage_details.long_description_b64,
         }
     )
 
@@ -99,7 +99,7 @@ def one_experience(username, creation_datetime):
                     technology.content for technology in experience_technologies
                 ],
                 "bullets": [bullet.content for bullet in experience_bullets],
-                "long_description": experience.long_description,
+                "long_description_b64": experience.long_description_b64,
             }
         }
     )
@@ -154,7 +154,7 @@ def one_project(username, creation_datetime):
                     technology.content for technology in project_technologies
                 ],
                 "bullets": [bullet.content for bullet in project_bullets],
-                "long_description": project.long_description,
+                "long_description_b64": project.long_description_b64,
             }
         }
     )

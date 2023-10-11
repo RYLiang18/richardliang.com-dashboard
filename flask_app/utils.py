@@ -1,3 +1,4 @@
+import base64
 import re
 from datetime import datetime
 
@@ -14,6 +15,14 @@ def is_date(data):
 def is_url(url):
     regex = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$"
     return bool(re.match(regex, url))
+
+
+def b64_encode(str):
+    return base64.b64encode(str.encode()).decode()
+
+
+def b64_decode(b64_str):
+    return base64.b64decode(b64_str.encode()).decode()
 
 
 def translate(property):

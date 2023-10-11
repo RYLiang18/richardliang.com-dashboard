@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from flask_app.constants import bullet_type, technology_type
 from flask_app.models import Link, Project, StringContent, load_user
 from flask_app.projects.forms import CreateProjectForm
-from flask_app.utils import current_time
+from flask_app.utils import b64_decode, b64_encode, current_time
 
 projects_blueprint = Blueprint(
     "projects", __name__, url_prefix="/projects", template_folder="./templates"
@@ -34,7 +34,7 @@ def create_project():
             start_date=create_project_form.start_date.data,
             end_date=create_project_form.end_date.data,
             image_link="https://i.imgur.com/nMIu8OU.jpg",
-            long_description=create_project_form.long_description.data,
+            long_description_b64=b64_encode(create_project_form.long_description.data),
             creation_datetime=current_time(),
         )
         new_project.save()

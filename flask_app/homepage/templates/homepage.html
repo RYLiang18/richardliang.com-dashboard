@@ -140,11 +140,7 @@
     <div class="card mb-3">
         <h3 class="card-header">Long Description (About Me)</h3>
         <div class="card-body">
-            {% for paragraph in homepage_details.parse_long_description() %}
-                <p class="card-text">
-                    {{paragraph}}
-                </p>
-            {% endfor %}
+            <pre>{{homepage_details.parse_long_description()}}</pre>
 
             <a
                 href="{{url_for(

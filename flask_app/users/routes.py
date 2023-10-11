@@ -6,7 +6,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from flask_app import bcrypt, ipsum
 from flask_app.models import HomepageDetails, User, load_user
 from flask_app.users.forms import LoginForm
-from flask_app.utils import current_time
+from flask_app.utils import b64_encode, current_time
 
 users_blueprint = Blueprint("users", __name__, template_folder="./templates")
 
@@ -18,7 +18,7 @@ def new_default_homepage():
         email="your_email@example.com",
         image_link="https://i.imgur.com/5r7v03y.png",
         short_description="replace me with a short description of yourself",
-        long_description=ipsum(),
+        long_description_b64=b64_encode(ipsum()),
         creation_datetime=current_time(),
     )
     default_homepage_details.save()

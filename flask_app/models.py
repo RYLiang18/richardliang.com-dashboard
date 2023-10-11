@@ -1,6 +1,7 @@
 from flask_login import UserMixin, current_user
 
 from flask_app import db, login_manager
+from flask_app.utils import b64_decode
 
 
 @login_manager.user_loader
@@ -38,10 +39,10 @@ class HomepageDetails(db.Document):
     email = db.EmailField(required=True)
     image_link = db.URLField(required=True)
     short_description = db.StringField(required=True)
-    long_description = db.StringField(required=True)
+    long_description_b64 = db.StringField(required=True)
 
     def parse_long_description(self):
-        return self.long_description.split("\n")
+        return b64_decode(self.long_description_b64)
 
 
 class Experience(db.Document):
@@ -51,11 +52,11 @@ class Experience(db.Document):
     start_date = db.StringField(required=True)
     end_date = db.StringField(required=True)
     image_link = db.URLField(required=True)
-    long_description = db.StringField(required=True)
+    long_description_b64 = db.StringField(required=True)
     creation_datetime = db.StringField(required=True)  # primary key
 
     def parse_long_description(self):
-        return self.long_description.split("\n")
+        return b64_decode(self.long_description_b64)
 
 
 class Project(db.Document):
@@ -64,8 +65,8 @@ class Project(db.Document):
     start_date = db.StringField(required=True)
     end_date = db.StringField()
     image_link = db.URLField(required=True)
-    long_description = db.StringField(required=True)
+    long_description_b64 = db.StringField(required=True)
     creation_datetime = db.StringField(required=True)  # primary key
 
     def parse_long_description(self):
-        return self.long_description.split("\n")
+        return b64_decode(self.long_description_b64)
